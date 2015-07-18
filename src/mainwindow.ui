@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+
+
+/*QTreeView {
+            border: 0px none transparent;
+}*/
+
+QDockWidget {
+           border: 1px solid gray;
+            /*titlebar-close-icon: url(close.png);
+            titlebar-normal-icon: url(undock.png);*/
+            margin: 0px
+            }
+
+            QDockWidget::title {
+            text-align: left; /* align the text to the left */
+            padding-left: 5px;
+            }
+
+            QDockWidget::close-button, QDockWidget::float-button {
+            border: 1px solid transparent;
+            background: transparent;
+             padding: 0px;
+            }
+
+            QDockWidget::close-button:hover, QDockWidget::float-button:hover {
+            background: transparent;
+            }
+
+           QDockWidget::close-button:pressed, QDockWidget::float-button:pressed {
+            padding: 1px -1px -1px 1px;
+
+            }
+
+
+
+
+
+            QStatusBar::item {
+            border: 0px none transparent;
+            }
+
+
+
+
+            QGroupBox::title {
+            subcontrol-origin: margin;
+            subcontrol-position: top center; /* position at the top center */
+            }
+
+ 
+
+
+
+
+
+            AttendBase {
+                       border: 0px none transparent;
+            border-radius: 1px;
+            spacing: 0px;
+            padding: -6px;
+            /*margin: -4px;*/
+            }
+
+            QToolBar#docksToolBar {
+            spacing: 5px;
+            padding: 5px;
+            }
+QToolBar#statusDockToolBar {
+            spacing: 2px;
+            padding: 0px;
+            }
+
+
+
+
+   
+
+
+
+ QMainWindow::separator {
+     background: gray;
+     width: 1px; /* when vertical */
+     height: 1px; /* when horizontal */
+ }
+
+ QMainWindow::separator:hover {
+     background: black;
+ }
+ QMainWindow::separator:pressed {
+     background: black;
+ }
+
+
+
+</string>
+  </property>
+  <property name="locale">
+   <locale language="English" country="UnitedKingdom"/>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QWidget" name="baseWidget" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QTabWidget" name="mainTabWidget"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="bar">
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>26</height>
+    </size>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
