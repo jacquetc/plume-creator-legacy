@@ -293,11 +293,14 @@ void FindReplace::applyConfig()
     QSettings settings;
 
     settings.beginGroup( "FindReplace" );
-    ui->caseSensitiveCheckBox->setChecked(settings.value("caseSensitive", false).toBool());
-    ui->caseSensitiveCheckBox->setChecked(settings.value("caseSensitive", false).toBool());
-    ui->textCheckBox->setChecked(settings.value("textCheck", true).toBool());
-    ui->synCheckBox->setChecked(settings.value("synCheck", false).toBool());
-    ui->noteCheckBox->setChecked(settings.value("noteCheck", false).toBool());
+    caseSensitive = settings.value("caseSensitive", false).toBool();
+    m_textCheckBox = settings.value("textCheck", true).toBool();
+    m_synCheckBox = settings.value("synCheck", false).toBool();
+    m_noteCheckBox = settings.value("noteCheck", false).toBool();
+    ui->caseSensitiveCheckBox->setChecked(caseSensitive);
+    ui->textCheckBox->setChecked(m_textCheckBox);
+    ui->synCheckBox->setChecked(m_synCheckBox);
+    ui->noteCheckBox->setChecked(m_noteCheckBox);
 
     settings.endGroup();
 
@@ -346,6 +349,7 @@ void FindReplace::openText(int id)
     noteDoc->textHighlighter()->setTextToHighlight(currentWordToFind);
 
 
+    ui->documentLabel->setText((hub->project()->mainTree_domElementForNumberHash()[id]).attribute("name"));
     currentTextOpened = id;
     emit currentOpenedSheetSignal(id);
 

@@ -91,7 +91,7 @@ TextHighlighter* MainTextDocument::textHighlighter()
 
 bool MainTextDocument::activateSpellChecker()
 {
-    if(!m_spellChecker->activate()){
+    if ((m_spellChecker == NULL) || (!m_spellChecker->activate())) {
         qWarning() << "activateSpellChecker() without dictionary";
         return false;
     }
