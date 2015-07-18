@@ -320,7 +320,7 @@ bool Hub::startProject(QString file)
     QSettings settings;
     QString defaultDict;
     if(!SpellChecker::dictsList().isEmpty())
-        defaultDict = SpellChecker::dictsList().begin().key();
+        defaultDict = SpellChecker::dictsList().begin().value();
     else
         defaultDict = "";
 
