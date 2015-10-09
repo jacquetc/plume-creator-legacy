@@ -466,17 +466,20 @@ void Exporter::exportDoc()
 
         QFile *textFile = new QFile;
         textFile->setFileName(fileName);
-        bool opened = textFile->open(QFile::ReadWrite | QFile::Text| QFile::Truncate);
+        bool opened = textFile->open(QFile::ReadWrite | QFile::Text);
         //                qDebug() << opened ;
         QTextStream textFileStream( textFile );
         QString textString(textFileStream.readAll());
-        QRegExp regExpCss("<style type=\x0022text/css\x0022>.*</style>");
-        regExpCss.setMinimal(true);
-        textString = textString.replace( regExpCss, "<style type=\x0022text/css\x0022>p, li { white-space: pre-wrap; } p{line-height: 2em; font-family:'Liberation Serif'; font-size:12pt;margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:72px;}</style>");
-        //                qDebug() << textString;
-        QByteArray array;
-        array.append(textString);
-        textFile->write(array);
+        if (textFile->resize(0))
+        {
+            QRegExp regExpCss("<style type=\x0022text/css\x0022>.*</style>");
+            regExpCss.setMinimal(true);
+            textString = textString.replace( regExpCss, "<style type=\x0022text/css\x0022>p, li { white-space: pre-wrap; } p{line-height: 2em; font-family:'Liberation Serif'; font-size:12pt;margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:72px;}</style>");
+            //                qDebug() << textString;
+            QByteArray array;
+            array.append(textString);
+            textFile->write(array);
+        }
 
         textFile->close();
 
