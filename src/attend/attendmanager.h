@@ -43,6 +43,7 @@ public:
 public slots:
     void setHub(Hub *varHub){hub = varHub;}
     void applySettings();
+    void resetDomElementForNumber();
 
 private slots:
     void setItemActivated(QModelIndex index);
@@ -53,7 +54,6 @@ private slots:
     void textAlreadyChangedSlot(bool textChanged){textAlreadyChanged = textChanged;}
     void editItemTitle(QModelIndex index);
     void setNameSlot(QString value);
-    void resetDomElementForNumber();
 
     void on_addObjectAction_triggered();
 

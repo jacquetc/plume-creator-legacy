@@ -75,6 +75,7 @@ private:
     AttendAbstractModel *absModel;
     AttendGlobalTreeProxyModel *globalProxyModel;
     AttendSheetTreeProxyModel *sheetProxyModel;
+    AttendManager *manager;
     bool isManagerLaunched;
 };
 

@@ -39,7 +39,7 @@ void AttendManager::postConstructor()
     connect(managerProxyModel, SIGNAL(activateItemSignal(QModelIndex)), this, SLOT(setItemActivated(QModelIndex)));
 
     connect(abstractModel, SIGNAL(applySettingsFromDataSignal()), ui->managerTreeView, SLOT(applySettingsFromData()), Qt::UniqueConnection);
-ui->managerTreeView->applySettingsFromData();
+    ui->managerTreeView->applySettingsFromData();
 
     ui->textEdit->setHub(hub);
 
@@ -65,13 +65,6 @@ ui->managerTreeView->applySettingsFromData();
     this->connectAll();
 
     ui->optionsFrame->setEnabled(false);
-
-
-    // open First :
-
-    //QHash<int, QDomElement>::iterator i = domElementForNumber.begin();
-    //  openedElement = i.value();
-
 }
 
 
@@ -88,8 +81,8 @@ AttendManager::~AttendManager()
 void AttendManager::openDetailsOf(QModelIndex sourceObject)
 {
     QModelIndex object = managerProxyModel->mapFromSource(sourceObject);
-ui->managerTreeView->setCurrentIndex(object);
-this->setItemActivated(object);
+    ui->managerTreeView->setCurrentIndex(object);
+    this->setItemActivated(object);
 }
 
 

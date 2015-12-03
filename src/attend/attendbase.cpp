@@ -2,7 +2,7 @@
 #include "ui_attendbase.h"
 
 AttendBase::AttendBase(QWidget *parent) :
-    QFrame(parent), ui(new Ui::AttendBase), absModel(NULL), globalProxyModel(NULL), sheetProxyModel(NULL), isManagerLaunched(false)
+    QFrame(parent), ui(new Ui::AttendBase), absModel(NULL), globalProxyModel(NULL), sheetProxyModel(NULL), manager(NULL), isManagerLaunched(false)
 {
     ui->setupUi(this);
     ui->splitter->setCollapsible(0, false);
@@ -68,12 +68,17 @@ AttendManager* AttendBase::launchAttendManager()
     if(isManagerLaunched )
         return 0;
 
-    AttendManager *manager = new AttendManager(this, absModel);
-    manager->setHub(hub);
-    manager->postConstructor();
-    manager->setModal(false);
+    if (!manager)
+    {
+        manager = new AttendManager(this, absModel);
+        manager->setHub(hub);
+        manager->postConstructor();
+        manager->setModal(false);
+        connect(manager, SIGNAL(finished(int)), this, SLOT(setManagerLaunched()));
+    }
+    else
+        manager->resetDomElementForNumber();
     manager->show();
-    connect(manager, SIGNAL(finished(int)), this, SLOT(setManagerLaunched()));
     isManagerLaunched = true;
 
     expandAll();
