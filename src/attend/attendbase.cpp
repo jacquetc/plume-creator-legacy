@@ -2,14 +2,10 @@
 #include "ui_attendbase.h"
 
 AttendBase::AttendBase(QWidget *parent) :
-    QFrame(parent), isManagerLaunched(false),
-    ui(new Ui::AttendBase)
+    QFrame(parent), ui(new Ui::AttendBase), absModel(NULL), globalProxyModel(NULL), sheetProxyModel(NULL), isManagerLaunched(false)
 {
     ui->setupUi(this);
     ui->splitter->setCollapsible(0, false);
-
-
-
 }
 
 AttendBase::~AttendBase()
@@ -19,43 +15,48 @@ AttendBase::~AttendBase()
 
 void AttendBase::startAttendance()
 {
-    absModel = new AttendAbstractModel();
-    absModel->setHub(hub);
-absModel->setDomDocument(hub->project()->attendTreeDomDoc());
+    if (!absModel)
+    {
+        absModel = new AttendAbstractModel();
+        absModel->setHub(hub);
+    }
+    absModel->setDomDocument(hub->project()->attendTreeDomDoc());
 
     absModel->resetAbsModel();
 
-    globalProxyModel = new AttendGlobalTreeProxyModel;
-    globalProxyModel->setHub(hub);
-    globalProxyModel->setSourceModel(absModel);
-    ui->globalTreeView->setModel(globalProxyModel );
+    if (!globalProxyModel)
+    {
+        globalProxyModel = new AttendGlobalTreeProxyModel;
+        globalProxyModel->setHub(hub);
+        globalProxyModel->setSourceModel(absModel);
+        ui->globalTreeView->setModel(globalProxyModel );
 
-    sheetProxyModel = new AttendSheetTreeProxyModel;
-    sheetProxyModel->setHub(hub);
-    sheetProxyModel->setSourceModel(absModel);
-    ui->sheetTreeView->setModel(sheetProxyModel );
-    ui->sheetTreeView->expandAll();
+        sheetProxyModel = new AttendSheetTreeProxyModel;
+        sheetProxyModel->setHub(hub);
+        sheetProxyModel->setSourceModel(absModel);
+        ui->sheetTreeView->setModel(sheetProxyModel );
+        ui->sheetTreeView->expandAll();
 
-    connect(hub->project(), SIGNAL(currentSheetNumberChanged(int)), sheetProxyModel, SLOT(currentSheetModified(int)), Qt::UniqueConnection);
-    connect(globalProxyModel, SIGNAL(attendSheetDataNumbersDropped(QList<int>)),sheetProxyModel, SLOT(removeSheetObjects(QList<int>)), Qt::UniqueConnection);
-
-
-    connect(ui->manageButton, SIGNAL(clicked()), this, SLOT(launchAttendManager()), Qt::UniqueConnection);
-    connect(ui->povButton, SIGNAL(clicked()), sheetProxyModel, SLOT(setPointOfView()), Qt::UniqueConnection);
-    connect(ui->sheetTreeView, SIGNAL(clicked(QModelIndex)), sheetProxyModel, SLOT(setClickedIndex(QModelIndex)), Qt::UniqueConnection);
-
-    connect(ui->sheetTreeView, SIGNAL(viewportEntered()), this, SLOT(expandAll()), Qt::UniqueConnection);
-    connect(ui->globalTreeView, SIGNAL(viewportEntered()), this, SLOT(expandAll()), Qt::UniqueConnection);
+        connect(hub->project(), SIGNAL(currentSheetNumberChanged(int)), sheetProxyModel, SLOT(currentSheetModified(int)), Qt::UniqueConnection);
+        connect(globalProxyModel, SIGNAL(attendSheetDataNumbersDropped(QList<int>)),sheetProxyModel, SLOT(removeSheetObjects(QList<int>)), Qt::UniqueConnection);
 
 
-    connect(ui->sheetTreeView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(openDetailsOf_fromSheet(QModelIndex)));
-    connect(ui->globalTreeView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(openDetailsOf_fromGlobal(QModelIndex)));
+        connect(ui->manageButton, SIGNAL(clicked()), this, SLOT(launchAttendManager()), Qt::UniqueConnection);
+        connect(ui->povButton, SIGNAL(clicked()), sheetProxyModel, SLOT(setPointOfView()), Qt::UniqueConnection);
+        connect(ui->sheetTreeView, SIGNAL(clicked(QModelIndex)), sheetProxyModel, SLOT(setClickedIndex(QModelIndex)), Qt::UniqueConnection);
+
+        connect(ui->sheetTreeView, SIGNAL(viewportEntered()), this, SLOT(expandAll()), Qt::UniqueConnection);
+        connect(ui->globalTreeView, SIGNAL(viewportEntered()), this, SLOT(expandAll()), Qt::UniqueConnection);
+
+
+        connect(ui->sheetTreeView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(openDetailsOf_fromSheet(QModelIndex)));
+        connect(ui->globalTreeView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(openDetailsOf_fromGlobal(QModelIndex)));
+    }
 }
 
 void AttendBase::stopAttendance()
 {
     QDomDocument emptyDomDoc;
-
 
     absModel->setDomDocument(emptyDomDoc);
     absModel->resetAbsModel();
@@ -77,23 +78,17 @@ AttendManager* AttendBase::launchAttendManager()
 
     expandAll();
 
-
     return manager;
-
 }
 
 void AttendBase::openDetailsOf_fromGlobal(QModelIndex index)
 {
     launchAttendManager()->openDetailsOf(globalProxyModel->mapToSource(index));
-
-
-
 }
+
 void AttendBase::openDetailsOf_fromSheet(QModelIndex index)
 {
     launchAttendManager()->openDetailsOf(sheetProxyModel->mapToSource(index));
-
-
 }
 
 void AttendBase::on_collapseButton_clicked()
@@ -117,7 +112,6 @@ void AttendBase::on_splitter_splitterMoved(int pos, int index)
         ui->collapseButton->setArrowType(Qt::UpArrow);
     else
         ui->collapseButton->setArrowType(Qt::DownArrow);
-
 }
 
 void AttendBase::expandAll()
@@ -125,5 +119,3 @@ void AttendBase::expandAll()
     ui->sheetTreeView->expandAll();
     ui->globalTreeView->expandAll();
 }
-
-
