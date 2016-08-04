@@ -29,7 +29,6 @@ MainWindow::MainWindow(QWidget *parent)
     ,numberSymbol(" ")
 
 {
-
     ui->setupUi(this);
     css = this->styleSheet();
 
