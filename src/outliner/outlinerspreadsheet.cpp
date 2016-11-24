@@ -235,14 +235,12 @@ void OutlinerSpreadsheet::giveStyle()
 {
     this->setAlternatingRowColors(true);
     //to take :
-//    QString css = "QTreeView {"
-//            "alternate-background-color: rgba(100,100,100,20);"
-//            "selection-background-color: rgba(100,100,100,30);"
-//            "selection-color: black;"
-//            "}"
-//            ;
+    QString css = "QTreeView::item {"
+            "border: 1px solid lightgrey;"
+            "}"
+            ;
 
-//    this->setStyleSheet(css);
+    this->setStyleSheet(css);
 }
 
 void OutlinerSpreadsheet::finishStatusEdit()

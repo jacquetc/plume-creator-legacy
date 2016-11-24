@@ -8,7 +8,7 @@ OutlinerItemPoVDelegate::OutlinerItemPoVDelegate(QObject *parent) :
     QStyledItemDelegate(parent),editorLaunched(false)
 {
     qListWidgetCss =    "QListWidget{"
-            "border-style: none;"
+            "border: 1px solid lightgrey;"
             "background-color: rgba(100,100,100,0)"
             "}"
             ;

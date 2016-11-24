@@ -9,7 +9,7 @@ OutlinerItemNoteDelegate::OutlinerItemNoteDelegate(QObject *parent) :
     QStyledItemDelegate(parent),editorLaunched(false)
 {
     noteZoneCss = "NoteZone{"
-            "border-style: none;"
+            "border: 1px solid lightgrey;"
             "background-color: rgba(100,100,100,0)"
             "}"
             ;

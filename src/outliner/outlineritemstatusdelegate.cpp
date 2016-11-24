@@ -4,7 +4,7 @@ OutlinerItemStatusDelegate::OutlinerItemStatusDelegate(QObject *parent) :
     QStyledItemDelegate(parent)
 {
     statusCss = "QComboBox{"
-            "border-style: none;"
+            "border: 1px solid lightgrey;"
             "background: rgba(100,100,100,0)"
             "}"
 

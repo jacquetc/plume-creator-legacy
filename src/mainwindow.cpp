@@ -1712,7 +1712,7 @@ void MainWindow::applyConfig()
             "height: 0px;"
             "}"
             "QTabWidget::pane#mainTabWidget {"
-            "padding-top : -20px"
+            "padding-top : -20px;"
 
             "}";
 

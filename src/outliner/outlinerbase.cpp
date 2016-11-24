@@ -43,7 +43,7 @@ void OutlinerBase::postConstructor()
 
     shiftToSpreadsheet();
 
-    applySpreadsheetConfig();
+    QTimer::singleShot(0, this, SLOT(applySpreadsheetConfig()));
 
 }
 
