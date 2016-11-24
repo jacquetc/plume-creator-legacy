@@ -20,7 +20,7 @@ this->setAttribute(Qt::WA_DeleteOnClose);
 
 
 
-
+    connect(spreadsheet->header(), &QHeaderView::sectionResized, this, &OutlinerBase::rememberSize);
 
 
 
@@ -43,23 +43,33 @@ void OutlinerBase::postConstructor()
 
     shiftToSpreadsheet();
 
-    QTimer::singleShot(0, this, SLOT(applySpreadsheetConfig()));
+    QTimer::singleShot(3, this, SLOT(applySpreadsheetConfig()));
 
 }
 
 //------------------------------------------------------------------------------------
 OutlinerBase::~OutlinerBase()
 {
+    saveConfig();
 }
 
 //------------------------------------------------------------------------------------
 void OutlinerBase::saveConfig()
 {
+    QString sizes;
+
+        QMapIterator<int, int> i(m_sizeMap);
+        while (i.hasNext()) {
+            i.next();
+            sizes.append(QString::number(i.key()) + ":" + QString::number(i.value()) + ",");
+        }
+
     QSettings settings;
     settings.beginGroup( "Outline");
 
+settings.setValue( "spreadsheetSizes", sizes);
         //       settings.setValue( "spreadsheetState", spreadsheet->horizontalHeader()->saveState());
-        settings.setValue( "spreadsheetState", spreadsheet->header()->saveState());
+        //settings.setValue( "spreadsheetState", spreadsheet->header()->saveState());
         settings.setValue( "lastOpened", "spreadsheet" );
         //       settings.setValue( "spreadsheetVertSize", spreadsheet->verticalHeader()->sectionSize(0));
 
@@ -68,6 +78,14 @@ void OutlinerBase::saveConfig()
 
 }
 
+//------------------------------------------------------------------------------------
+
+
+void OutlinerBase::rememberSize(int logicalIndex, int oldSize, int newSize)
+{
+    Q_UNUSED(oldSize);
+    m_sizeMap.insert(logicalIndex, newSize);
+}
 //------------------------------------------------------------------------------------
 
 
@@ -111,9 +129,22 @@ void OutlinerBase::applySpreadsheetConfig()
     QSettings settings;
     settings.beginGroup( "Outline" );
     //    spreadsheet->horizontalHeader()->restoreState(settings.value( "spreadsheetState",0 ).toByteArray());
-    spreadsheet->header()->restoreState(settings.value( "spreadsheetState",0 ).toByteArray());
+    //spreadsheet->header()->restoreState(settings.value( "spreadsheetState",0 ).toByteArray());
     //    spreadsheet->verticalHeader()->setDefaultSectionSize(settings.value( "spreadsheetVertSize",40 ).toInt());
+    QString value = settings.value( "spreadsheetSizes", "").toString();
+    QStringList pairList = value.split(",", QString::SkipEmptyParts);
+    foreach(const QString &pair, pairList) {
+        QStringList keyValue = pair.split(":", QString::SkipEmptyParts);
+        int key = keyValue.at(0).toInt();
+        int value = keyValue.at(1).toInt();
+        m_sizeMap.insert(key, value);
+    }
 
+    QMapIterator<int, int> i(m_sizeMap);
+    while (i.hasNext()) {
+        i.next();
+        spreadsheet->header()->resizeSection(i.key(), i.value());
+    }
 
 
     settings.endGroup();

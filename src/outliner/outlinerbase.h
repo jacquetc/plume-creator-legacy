@@ -26,6 +26,7 @@
 #include <QtGui>   
 #include <QWidget>
 #include <QDomDocument>
+#include <QMap>
 
 #include "hub.h"
 #include "outliner/outlinerspreadsheet.h"
@@ -75,7 +76,7 @@ private slots:
     void resetSpreadsheetState();
 
 void moveViewTo(int hBarValue, int vBarValue);
-
+void rememberSize(int logicalIndex, int oldSize, int newSize);
 
 private:
     Hub *hub;
@@ -93,6 +94,7 @@ QString lastOpened;
 QDomDocument mtoO_domDoc;
 
 QHash<MainTextDocument *, int> mtoO_numForDoc;
+QMap<int, int> m_sizeMap;
 
     QHash<QListWidgetItem *, QDomElement> attend_domElementForItem;
     QHash<int, QDomElement> attend_domElementForItemNumber;
