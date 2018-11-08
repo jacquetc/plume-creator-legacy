@@ -91,5 +91,7 @@
         <file>pics/pin-off.png</file>
         <file>pics/edit-undo-32x32.png</file>
         <file>pics/dialog-ok-apply-32x32.png</file>
+        <file>pics/document-save.svg</file>
+        <file>pics/document-save-as.svg</file>
     </qresource>
 </RCC>

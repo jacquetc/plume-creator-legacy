@@ -399,28 +399,28 @@ std::string PfxEntry::check_morph(const char* word,
               ((!needflag) || TESTAFF(he->astr, needflag, he->alen) ||
                (contclass && TESTAFF(contclass, needflag, contclasslen)))) {
             if (morphcode) {
-              result.push_back(MSEP_FLD);
+              result.append(" ");
               result.append(morphcode);
             } else
               result.append(getKey());
             if (!HENTRY_FIND(he, MORPH_STEM)) {
-              result.push_back(MSEP_FLD);
+              result.append(" ");
               result.append(MORPH_STEM);
               result.append(HENTRY_WORD(he));
             }
             // store the pointer of the hash entry
             if (HENTRY_DATA(he)) {
-              result.push_back(MSEP_FLD);
+              result.append(" ");
               result.append(HENTRY_DATA2(he));
             } else {
               // return with debug information
               char* flag = pmyMgr->encode_flag(getFlag());
-              result.push_back(MSEP_FLD);
+              result.append(" ");
               result.append(MORPH_FLAG);
               result.append(flag);
               free(flag);
             }
-            result.push_back(MSEP_REC);
+            result.append("\n");
           }
           he = he->next_homonym;
         } while (he);
@@ -804,7 +804,7 @@ std::string SfxEntry::check_twosfx_morph(const char* word,
           if (!st.empty()) {
             if (ppfx->getMorph()) {
               result.append(ppfx->getMorph());
-              result.push_back(MSEP_FLD);
+              result.append(" ");
             }
             result.append(st);
             mychomp(result);

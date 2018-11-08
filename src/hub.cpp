@@ -376,7 +376,7 @@ void Hub::closeCurrentProject()
 
     //clear all the docs :
 
-QHash<MainTextDocument *, QFile *> hash = m_project->mainTree_fileForDocHash();
+    QHash<MainTextDocument *, QFile *> hash = m_project->mainTree_fileForDocHash();
     QHash<MainTextDocument *, QFile *>::iterator i = hash.begin();
 
     while (i != hash.end()) {
@@ -395,7 +395,7 @@ QHash<MainTextDocument *, QFile *> hash = m_project->mainTree_fileForDocHash();
     disconnect(wcThread, SIGNAL(sceneWordCount(int)), this,  SIGNAL(sceneWordCount(int)));
 
 
- QHash<QTextDocument *, QFile *> hash2 = m_project->attendTree_fileForDocHash();
+    QHash<QTextDocument *, QFile *> hash2 = m_project->attendTree_fileForDocHash();
     QHash<QTextDocument *, QFile *>::iterator j = hash2.begin();
 
     while (j != hash2.end()) {
@@ -781,6 +781,9 @@ void Hub::loadAttendDocs(QDomNodeList list)
 
 //--------------------------------------------------------------------------------------
 
+
+//--------------------------------------------------------------------------------------
+
 void Hub::saveProject(QString mode)
 {
 
@@ -811,11 +814,11 @@ void Hub::saveProject(QString mode)
         zipper->start(QThread::HighestPriority);
         zipper->wait(30000);
     }
-    else
+    else {
         zipper->start(QThread::LowestPriority);
+        this->showStatusBarMessage(tr("Project saved"));
+    }
 
-
-    //    this->showStatusBarMessage(tr("Project saved"));
 }
 //--------------------------------------------------------------------------------------
 
@@ -1061,7 +1064,7 @@ void Hub::connectAllSheetsToWordCountThread()
 {
     wcThread->set_mainTree_numForDocHash(m_project->mainTree_numForDocHash());
 
-   QHash<MainTextDocument *, QFile *> hash = m_project->mainTree_fileForDocHash();
+    QHash<MainTextDocument *, QFile *> hash = m_project->mainTree_fileForDocHash();
     QHash<MainTextDocument *, QFile *>::iterator i = hash.begin();
     while (i != hash.end()) {
         MainTextDocument *doc = i.key();

@@ -4,10 +4,10 @@
 # Project created by QtCreator 2011-07-25T11:13:12
 #
 #-------------------------------------------------
-lessThan(QT_VERSION, 4.8.3) {
-        error("Plume Creator requires Qt 4.8.3 or greater")
+lessThan(QT_VERSION, 5.05.0) {
+        error("Plume Creator requires Qt 5.5 or greater")
 }
-
+CONFIG += c++14
 
 QT += core gui xml
 
@@ -16,7 +16,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport multimedia
 
 TEMPLATE = app
 
-VERSION = 0.66.2
+VERSION = 0.68
 DEFINES += VERSIONSTR=\\\"$${VERSION}\\\"
 
 #DESTDIR = bin
@@ -49,17 +49,19 @@ win32: LIBS += -lzdll
 INCLUDEPATH +=  ./externals/quazip
 
 # hunspell
+INCLUDEPATH +=  ./externals/hunspell
+
+include(./externals/qtsingleapplication/src/qtsingleapplication.pri)
+include(./externals/quazip/quazip.pri)
 
 
-#unix: !macx {
+unix: !macx {
 
-#LIBS += -lhunspell \
-#-lhunspell-1.3
-
-#}
-#else {
+LIBS += -lhunspell
+}
+else {
 include(./externals/hunspell/hunspell.pro)
-#}
+}
 
 
 
@@ -257,9 +259,6 @@ translations/plume-creator_de_DE.ts \
 translations/plume-creator_sp_SP.ts \
 translations/plume-creator_ru_RU.ts \
 translations/plume-creator_pt_BR.ts
-
-include(./externals/qtsingleapplication/src/qtsingleapplication.pri)
-include(./externals/quazip/quazip.pro)
 
 FORMS += \
 src/settingsdialog.ui \

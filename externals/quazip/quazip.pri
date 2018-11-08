@@ -1,7 +1,6 @@
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 HEADERS += \
-        $$PWD/minizip_crypt.h \
         $$PWD/ioapi.h \
         $$PWD/JlCompress.h \
         $$PWD/quaadler32.h \
@@ -16,7 +15,8 @@ HEADERS += \
         $$PWD/quazip.h \
         $$PWD/quazipnewinfo.h \
         $$PWD/unzip.h \
-        $$PWD/zip.h
+        $$PWD/zip.h \
+    $$PWD/crypt.h
 
 SOURCES += $$PWD/qioapi.cpp \
            $$PWD/JlCompress.cpp \

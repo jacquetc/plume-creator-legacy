@@ -199,7 +199,7 @@ typedef struct
 
 
 #ifndef NOUNCRYPT
-#include "minizip_crypt.h"
+#include "crypt.h"
 #endif
 
 /* ===========================================================================

@@ -103,6 +103,21 @@ void MenuBar::startCenter()
     center->exec();
 }
 
+
+//---------------------------------------------------------------------------
+
+void MenuBar::saveProject()
+{
+    hub->saveProject();
+}
+
+//---------------------------------------------------------------------------
+
+void MenuBar::saveProjectAs()
+{
+
+}
+
 //---------------------------------------------------------------------------
 
 
@@ -136,7 +151,7 @@ void MenuBar::displayConfig(int tabIndex)
 //--------------------------------------------------------------------------
 
 
-void MenuBar::closeProject()
+bool MenuBar::closeProject()
 {
     //    if(projectAlreadyOpened == false)
     //        return;
@@ -145,25 +160,34 @@ void MenuBar::closeProject()
     //        return;
 
     QMessageBox msgBox(parentWidget);
-    msgBox.setText(tr("Do you want to close the current project ?"));
-    msgBox.setInformativeText(tr("Your changes are already saved."));
-    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msgBox.setText(tr("Do you want to save the current project ?"));
+    msgBox.setInformativeText(tr(""));
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
     msgBox.setDefaultButton(QMessageBox::Cancel);
     int ret = msgBox.exec();
 
     switch (ret) {
-    case QMessageBox::Ok:
+    case QMessageBox::Save:
+        hub->saveProject("wait");
+
+        hub->closeCurrentProject();
+        projectAlreadyOpened = false;
+        break;
+
+    case QMessageBox::Discard:
         hub->closeCurrentProject();
         projectAlreadyOpened = false;
         break;
 
     case QMessageBox::Cancel:
-        return;
+        return false;
         break;
     default:
         // should never be reached
         break;
     }
+
+    return true;
 
 
 
@@ -334,23 +358,23 @@ void MenuBar::about()
 
                        "<p>Version " + currentVersion + "</p>"
 
-                       "<p><center><address><a href=http://www.plume-creator.eu>http://www.plume-creator.eu</a></address></center></p>"
+                                                        "<p><center><address><a href=http://www.plume-creator.eu>http://www.plume-creator.eu</a></address></center></p>"
 
-                       "<p>Copyright (C)" + QString::number(QDate::currentDate().year())   +", created by Cyril Jacquet</p>"
-                       "<p>cyril.jacquet@plume-creator.eu</p></center>"
-                       "<br>"
-                       "<p>Plume Creator is free software: you can redistribute it and/or modify "
-                       "it under the terms of the GNU General Public License as published by "
-                       "the Free Software Foundation, either version 3 of the License, or "
-                       "(at your option) any later version.</p> "
-                       "<br>"
-                       "<p>Plume Creator is distributed in the hope that it will be useful, "
-                       "but WITHOUT ANY WARRANTY; without even the implied warranty of "
-                       "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
-                       "GNU General Public License for more details.</p>"
-                       "<br>"
-                       "<p>You should have received a copy of the GNU General Public License "
-                       "along with Plume Creator.  If not, see <address>http://www.gnu.org/licenses</address>.</p>"
+                                                        "<p>Copyright (C)" + QString::number(QDate::currentDate().year())   +", created by Cyril Jacquet</p>"
+                                                                                                                             "<p>cyril.jacquet@plume-creator.eu</p></center>"
+                                                                                                                             "<br>"
+                                                                                                                             "<p>Plume Creator is free software: you can redistribute it and/or modify "
+                                                                                                                             "it under the terms of the GNU General Public License as published by "
+                                                                                                                             "the Free Software Foundation, either version 3 of the License, or "
+                                                                                                                             "(at your option) any later version.</p> "
+                                                                                                                             "<br>"
+                                                                                                                             "<p>Plume Creator is distributed in the hope that it will be useful, "
+                                                                                                                             "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+                                                                                                                             "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
+                                                                                                                             "GNU General Public License for more details.</p>"
+                                                                                                                             "<br>"
+                                                                                                                             "<p>You should have received a copy of the GNU General Public License "
+                                                                                                                             "along with Plume Creator.  If not, see <address>http://www.gnu.org/licenses</address>.</p>"
                        );
 
 
@@ -369,6 +393,12 @@ void MenuBar::launchCheckUpdateDialog(QString mode)
 
 void MenuBar::exit()
 {
+    if(projectAlreadyOpened){
+        bool value = closeProject();
+        if(!value){
+            return;
+        }
+    }
 
     writeSettings();
     emit exitSignal();
@@ -421,6 +451,17 @@ void MenuBar::createActions()
     displayConfigAct->setToolTip(tr("Display the configuration"));
     connect(displayConfigAct, SIGNAL(triggered()), this, SLOT(displayConfig()));
 
+    saveProjectAct = new QAction(QIcon(":/pics/document-save.svg"),tr("&Save Project"), this);
+    saveProjectAct->setShortcut(QKeySequence::Save);
+    saveProjectAct->setToolTip(tr("Save the current project"));
+    connect(saveProjectAct, SIGNAL(triggered()), this, SLOT(saveProject()));
+
+    //    saveProjectAsAct = new QAction(QIcon(":/pics/document-save-as.svg"),tr("&Save Project as"), this);
+    //    saveProjectAsAct->setShortcut(QKeySequence::SaveAs);
+    //    saveProjectAsAct->setToolTip(tr("Save the current project as..."));
+    //    connect(saveProjectAsAct, SIGNAL(triggered()), this, SLOT(saveProjectAs()));
+
+
     exportAct = new QAction(QIcon(":/pics/document-export.png"),tr("&Export"), this);
     //   exportAct->setShortcut(QKeySequence::Print);
     exportAct->setToolTip(tr("Export the project"));
@@ -446,6 +487,9 @@ void MenuBar::createActions()
     projectGroup->addAction(startCenterAct);
     projectGroup->addSeparator();
     projectGroup->addAction(newProjectAct);
+    projectGroup->addSeparator();
+    projectGroup->addAction(saveProjectAct);
+    //projectGroup->addAction(saveProjectAsAct);
     projectGroup->addSeparator();
     projectGroup->addAction(displayConfigAct);
     projectGroup->addSeparator();
@@ -596,6 +640,10 @@ void MenuBar::setMenusEnabled(bool enabledBool)
     editGroup->setEnabled(enabledBool);
     printAct->setEnabled(enabledBool);
     exportAct->setEnabled(enabledBool);
+    saveProjectAct->setEnabled(enabledBool);
+
+    projectAlreadyOpened=enabledBool;
+
 }
 
 

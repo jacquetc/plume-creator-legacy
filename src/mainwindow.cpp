@@ -1568,42 +1568,44 @@ void MainWindow::writeDocksSettings()
 void MainWindow::closeEvent(QCloseEvent* event)
 {
 
-    if(!hub->project()->isProjectOpened()){
-        writeSettings();
-        event->accept();
-        return;
-    }
+    menu->exit();
+
+//    if(!hub->project()->isProjectOpened()){
+//        writeSettings();
+//        event->accept();
+//        return;
+//    }
 
 
-    QMessageBox msgBox(this);
-    msgBox.setText(tr("Do you want to quit ?"));
-    msgBox.setInformativeText(tr("Your changes are already saved."));
-    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Cancel);
-    int ret = msgBox.exec();
+//    QMessageBox msgBox(this);
+//    msgBox.setText(tr("Do you want to quit ?"));
+//    msgBox.setInformativeText(tr("Your changes are already saved."));
+//    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+//    msgBox.setDefaultButton(QMessageBox::Cancel);
+//    int ret = msgBox.exec();
 
-    switch (ret) {
-    case QMessageBox::Ok:
-
-
-        writeSettings();
-        hub->closeCurrentProject();
-        event->accept();
-
-        //        systemTray->show();
-        //        systemTray->showMessage("Plume Creator", tr("Your project was successfully saved."), QSystemTrayIcon::Information, 3000);
-
-        break;
-
-    case QMessageBox::Cancel:
-        event->ignore();
+//    switch (ret) {
+//    case QMessageBox::Ok:
 
 
-        break;
-    default:
-        // should never be reached
-        break;
-    }
+//        writeSettings();
+//        hub->closeCurrentProject();
+//        event->accept();
+
+//        //        systemTray->show();
+//        //        systemTray->showMessage("Plume Creator", tr("Your project was successfully saved."), QSystemTrayIcon::Information, 3000);
+
+//        break;
+
+//    case QMessageBox::Cancel:
+//        event->ignore();
+
+
+//        break;
+//    default:
+//        // should never be reached
+//        break;
+//    }
 
 
 

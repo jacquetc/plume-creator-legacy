@@ -1,5 +1,6 @@
 #include "selectpage.h"
 #include "ui_selectpage.h"
+#include <QRegExpValidator>
 
 SelectPage::SelectPage(QWidget *parent) :
     QWizardPage(parent),

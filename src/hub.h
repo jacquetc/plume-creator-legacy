@@ -147,9 +147,9 @@ public slots:
 
 
     void openSheet(int id);
+    void saveProject(QString mode = "");
 
 private slots:
-    void saveProject(QString mode = "");
     void unlockFiles();
     void lockFiles();
     bool loadTemp();

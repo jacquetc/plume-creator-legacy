@@ -128,16 +128,19 @@ void setMenusEnabled(bool enabledBool);
 
 void setMainTreeAbstractModel(MainTreeAbstractModel *tree){absTreeModel = tree;}
 
+void exit();
 
 private slots:
 
     void newProject();
     void startCenter();
     //   void open();
+    void saveProject();
+    void saveProjectAs();
     void displayConfig(int tabIndex = 0);
     void exporter();
     void print();
-    void closeProject();
+    bool closeProject();
     void findAndReplace();
     void manageStyles();
     void aboutQt();
@@ -145,7 +148,6 @@ private slots:
     void viewReleaseNotes();
     void viewCredits();
     void checkUpdate(){ launchCheckUpdateDialog("none"); }
-    void exit();
 
     void createEditWidget();
 
@@ -174,6 +176,8 @@ bool projectAlreadyOpened;
     *startCenterAct,
     //   *openAct,
     *displayConfigAct,
+    *saveProjectAct,
+    *saveProjectAsAct,
     *closeProjectAct,
     *exitAct,
     *printAct,
