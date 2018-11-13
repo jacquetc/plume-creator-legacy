@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QAbstractItemModel>
+#include <QModelIndex>
 
 #include "hub.h"
 #include "attend/attendtreeitem.h"

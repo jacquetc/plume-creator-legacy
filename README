@@ -1,5 +1,9 @@
 PLUME CREATOR
 
+v 0.66.3
+        - update 3rd parties libraries
+        - add a save button
+
 v 0.66.2
 	- new feature : overview in the project tree.
 	- Fix Mise en Scene crash when deleting an object

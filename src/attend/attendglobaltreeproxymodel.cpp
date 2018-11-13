@@ -27,7 +27,7 @@ QMimeData *AttendGlobalTreeProxyModel::mimeData(const QModelIndexList &indexes) 
                 QList<AttendTreeItem *> childrenList = treeItem->childrenItems();
                 foreach(const AttendTreeItem *item, childrenList){
                     encodedData.append("-" + QString::number(item->idNumber()));
-//                    qDebug() << "encodedData.append : " << QString::number(item->idNumber());
+                    //                    qDebug() << "encodedData.append : " << QString::number(item->idNumber());
                 }
             }
         }
@@ -54,7 +54,7 @@ bool AttendGlobalTreeProxyModel::dropMimeData ( const QMimeData * data, Qt::Drop
 
     if (data->hasFormat("application/x-plumecreator-attendnumberdata-fromsheettree"))
     {
-//        qDebug() << "to global : data->text :  "<< QString::fromUtf8(data->data("application/x-plumecreator-attendnumberdata-fromsheettree"));
+        //        qDebug() << "to global : data->text :  "<< QString::fromUtf8(data->data("application/x-plumecreator-attendnumberdata-fromsheettree"));
 
         QString numbersString = QString::fromUtf8(data->data("application/x-plumecreator-attendnumberdata-fromsheettree"));
         QStringList list = numbersString.split("-", QString::SkipEmptyParts);

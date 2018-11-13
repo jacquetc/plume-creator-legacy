@@ -21,6 +21,7 @@
 #define ATTENDMANAGERTREEPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
+#include <QModelIndex>
 #include "hub.h"
 #include "attendtreeitem.h"
 

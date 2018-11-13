@@ -44,6 +44,9 @@
            <height>0</height>
           </size>
          </property>
+         <property name="acceptDrops">
+          <bool>true</bool>
+         </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
@@ -75,7 +78,7 @@
           <bool>false</bool>
          </property>
          <attribute name="headerVisible">
-          <bool>true</bool>
+          <bool>false</bool>
          </attribute>
         </widget>
        </item>
@@ -139,6 +142,9 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="QTreeView" name="globalTreeView">
+         <property name="acceptDrops">
+          <bool>true</bool>
+         </property>
          <property name="verticalScrollBarPolicy">
           <enum>Qt::ScrollBarAsNeeded</enum>
          </property>
@@ -146,7 +152,7 @@
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
          <property name="dragEnabled">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="dragDropMode">
           <enum>QAbstractItemView::DragDrop</enum>

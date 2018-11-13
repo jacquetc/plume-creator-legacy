@@ -7,7 +7,6 @@
 lessThan(QT_VERSION, 5.05.0) {
         error("Plume Creator requires Qt 5.5 or greater")
 }
-CONFIG += c++14
 
 QT += core gui xml
 
@@ -16,7 +15,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport multimedia
 
 TEMPLATE = app
 
-VERSION = 0.68
+VERSION = 0.66.3
 DEFINES += VERSIONSTR=\\\"$${VERSION}\\\"
 
 #DESTDIR = bin

@@ -2,10 +2,11 @@
 #include "ui_attendbase.h"
 
 AttendBase::AttendBase(QWidget *parent) :
-    QFrame(parent), ui(new Ui::AttendBase), absModel(NULL), globalProxyModel(NULL), sheetProxyModel(NULL), manager(NULL), isManagerLaunched(false)
+    QFrame(parent), ui(new Ui::AttendBase), absModel(nullptr), globalProxyModel(nullptr), sheetProxyModel(nullptr), manager(nullptr), isManagerLaunched(false)
 {
     ui->setupUi(this);
     ui->splitter->setCollapsible(0, false);
+
 }
 
 AttendBase::~AttendBase()
@@ -66,7 +67,7 @@ void AttendBase::stopAttendance()
 AttendManager* AttendBase::launchAttendManager()
 {
     if(isManagerLaunched )
-        return 0;
+        return nullptr;
 
     if (!manager)
     {

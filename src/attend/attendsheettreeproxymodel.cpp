@@ -277,7 +277,7 @@ bool AttendSheetTreeProxyModel::dropMimeData ( const QMimeData * data, Qt::DropA
 
     if (data->hasFormat("application/x-plumecreator-attendnumberdata-fromglobaltree"))
     {
-        //        qDebug() << "to sheet : data->text :  "<< QString::fromUtf8(data->data("application/x-plumecreator-attendnumberdata-fromglobaltree"));
+                qDebug() << "to sheet : data->text :  "<< QString::fromUtf8(data->data("application/x-plumecreator-attendnumberdata-fromglobaltree"));
 
 
         QString numbersString = QString::fromUtf8(data->data("application/x-plumecreator-attendnumberdata-fromglobaltree"));
@@ -304,9 +304,9 @@ bool AttendSheetTreeProxyModel::dropMimeData ( const QMimeData * data, Qt::DropA
 
 Qt::ItemFlags AttendSheetTreeProxyModel::flags(const QModelIndex &index) const
 {
+    return Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+
     Qt::ItemFlags defaultFlags = QSortFilterProxyModel::flags(index) ;
-
-
 
     if (index.isValid())
         return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
@@ -314,6 +314,7 @@ Qt::ItemFlags AttendSheetTreeProxyModel::flags(const QModelIndex &index) const
         return Qt::ItemIsDropEnabled |defaultFlags;
 }
 
+//-------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
