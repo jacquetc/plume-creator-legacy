@@ -194,6 +194,7 @@ void MainWindow::createMenuBar()
 
     connect(menu, SIGNAL(launchCheckUpdateSignal(QString)), this, SLOT(launchSlimUpdater(QString)));
     connect(menu, SIGNAL(applyStyleSheetSignal()), this, SLOT(giveStyle()));
+    connect(menu, SIGNAL(applyConfigSignal()), hub,SLOT(applyConfig()));
 
 
 
@@ -1355,7 +1356,6 @@ void MainWindow::tabCloseRequest(int tabNum)
     QTimer::singleShot(500, this, SLOT(reconnectAFterTabClose()));
 
     //    connect(mainTabWidget, SIGNAL(currentChanged(int)), this,SLOT(tabChangeSlot(int)),Qt::UniqueConnection);
-    hub->addToSaveQueue();
 
 }
 
@@ -1663,15 +1663,15 @@ void MainWindow::autosaveTimer()
 void MainWindow::textChangedSlot()
 {
 
-    hub->addToSaveQueue();
+//
 
 
-    if(!textAlreadyChanged){
-        textAlreadyChanged = true;
+//    if(!textAlreadyChanged){
+//        textAlreadyChanged = true;
 
-        QTimer::singleShot(autosaveTime, hub, SLOT(addToSaveQueue()));
+//        QTimer::singleShot(autosaveTime, hub, SLOT(addToSaveQueue()));
 
-    }
+//    }
 }
 
 

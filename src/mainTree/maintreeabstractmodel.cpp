@@ -262,7 +262,7 @@ bool MainTreeAbstractModel::setData(const QModelIndex &index,
         element.setAttribute("name", value.toString());
 
         emit dataChanged(index, index);
-        hub->addToSaveQueue();
+
 
         return true;
     }
@@ -290,7 +290,7 @@ bool MainTreeAbstractModel::setData(const QModelIndex &index,
 
         updateMainTextDoc(synDoc, index.data(Qt::UserRole).toInt());
 
-        hub->addToSaveQueue();
+
 
         return true;
     }
@@ -320,7 +320,7 @@ bool MainTreeAbstractModel::setData(const QModelIndex &index,
 
         updateMainTextDoc(noteDoc, index.data(Qt::UserRole).toInt());
 
-        hub->addToSaveQueue();
+
 
         return true;
 
@@ -342,7 +342,7 @@ bool MainTreeAbstractModel::setData(const QModelIndex &index,
 
         emit dataChanged(index, index);
 
-        hub->addToSaveQueue();
+
 
         return true;
 
@@ -364,7 +364,7 @@ bool MainTreeAbstractModel::setData(const QModelIndex &index,
 
         emit dataChanged(index, index);
 
-        hub->addToSaveQueue();
+
 
         return true;
 
@@ -1198,7 +1198,7 @@ void MainTreeAbstractModel::actionSlot(QString action, int idNumber, QVariant va
     }
 
 
-    hub->addToSaveQueue();
+
     this->resetAbsModel();
 
 
@@ -1432,9 +1432,32 @@ QDomElement targetElement;
 
 
     }
+    else if(action == "sortAlpha"){
+        QDomNodeList childrenList = targetElement.childNodes();
+
+        if(childrenList.count() <= 1)
+            return;
+        qDebug() << "childrenList.length() :" << childrenList.length();
+       // takes last and
+        for(int j = 0 ; j < childrenList.length() ; ++j ){
+        for(int i = 1 ; i < childrenList.length() ; ++i ){
 
 
-    hub->addToSaveQueue();
+            QDomNode iNode = childrenList.item(i);
+            QDomNode iNodeBefore = childrenList.item(i - 1);
+
+            if(iNode.toElement().attribute("name", "") < iNodeBefore.toElement().attribute("name", ""))
+                this->actionSlot("moveUp", iNode.toElement().attribute("number").toInt());
+
+
+
+        }
+        }
+
+    }
+
+
+
     this->resetAbsModel();
 
 }
@@ -1466,7 +1489,7 @@ int MainTreeAbstractModel::addItemNext(int baseNumber)
 
 
 
-    hub->addToSaveQueue();
+
     this->resetAbsModel();
 
 
@@ -1901,7 +1924,7 @@ void MainTreeAbstractModel::createNewStructure(QHash<QString, int> newStructureH
 
 
 
-    hub->addToSaveQueue();
+
     this->resetAbsModel();
 
 

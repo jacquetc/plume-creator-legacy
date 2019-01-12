@@ -177,7 +177,5 @@ QString stringBox_1;
         root.setAttribute("spinBox_1_label", ui->spinBox_1_labelEdit->text());
 
 
-    hub->addToSaveQueue();
-
     QDialog::accept();
 }

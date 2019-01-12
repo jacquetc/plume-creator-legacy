@@ -131,6 +131,8 @@ QMenu *MainTreeContextMenu::menu(MainTreeContextMenu::Actions flags)
         advancedMenu->addAction(autoRenameChildrenAct);
         advancedMenu->addAction(addMultiAct);
         advancedMenu->addAction(splitAct);
+        QMenu *sortMenu = m_menu->addMenu(tr("&Sort"));
+        sortMenu->addAction(sortAlphaAct);
 
     }
     return m_menu;
@@ -208,6 +210,9 @@ void MainTreeContextMenu::prepareContextMenu()
 
     showOverviewAct = new QAction(QIcon(""),tr("Overview"), this);
     connect(showOverviewAct, SIGNAL(triggered()), this, SLOT(showOverview()));
+
+    sortAlphaAct = new QAction(QIcon(""),tr("Alphabetically"), this);
+    connect(sortAlphaAct, SIGNAL(triggered()), this, SLOT(sortAlpha()));
 
 }
 
@@ -421,5 +426,35 @@ void MainTreeContextMenu::showOverview()
 
 
 
+
+}
+
+//---------------------------------------------------------------------------
+
+
+void MainTreeContextMenu::sortAlpha()
+{
+    QString name = targetedElement.attribute("name", "");
+
+    int ret = QMessageBox::warning(base, tr("Sort Alphabetically"),
+                                   tr("<p> Children of %1 will be sorted alphabetically.</p>\n"
+                                      "<br>"
+                                      "<p>Do you really want to continue ?</p>").arg(name),
+                                   QMessageBox::Yes | QMessageBox::Cancel,
+                                   QMessageBox::Cancel);
+
+    switch (ret) {
+    case QMessageBox::Yes:
+        emit actionSignal("emptyTrash", m_id);
+        break;
+    case QMessageBox::Cancel:
+        return;
+        break;
+    default:
+        return;
+        break;
+    }
+
+    emit actionSignal("sortAlpha", m_id);
 
 }

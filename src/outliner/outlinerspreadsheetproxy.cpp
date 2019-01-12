@@ -159,7 +159,7 @@ bool OutlinerSpreadheetProxy::setData(const QModelIndex &index, const QVariant &
         emit dataChanged(index, index, vector);
 #endif
 
-        hub->addToSaveQueue();
+        
 
         return true;
     }
@@ -361,7 +361,7 @@ bool OutlinerSpreadheetProxy::dropMimeData ( const QMimeData * data, Qt::DropAct
 
         }
 
-        hub->addToSaveQueue();
+        
         emit resetAbsModelSignal();
 
 

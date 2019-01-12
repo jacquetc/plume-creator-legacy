@@ -772,6 +772,8 @@ void SettingsDialog::readSettings()
     settings.beginGroup( "Settings" );
     autosaveTime = settings.value("autosaveTime", 20000).toInt();
     ui->autosaveTimeSpinBox->setValue(autosaveTime / 1000);
+    backupTime = settings.value("backupTime", 1800000).toInt();
+    ui->backupEverySpinBox->setValue(backupTime / 60000);
     ui->preventDoubleSpaceCheckBox->setChecked(settings.value("preventDoubleSpace", false).toBool());
     ui->oneTabOnlyCheckBox->setChecked(settings.value("oneTabOnly", false).toBool());
     ui->noTabCheckBox->setChecked(settings.value("TextArea/noTab", false).toBool());
@@ -907,6 +909,7 @@ void SettingsDialog::accept()
 
     settings.beginGroup( "Settings" );
     settings.setValue("autosaveTime", ui->autosaveTimeSpinBox->value() * 1000);
+    settings.setValue("backupTime", ui->backupEverySpinBox->value() * 60000);
     settings.setValue("preventDoubleSpace", ui->preventDoubleSpaceCheckBox->isChecked());
     settings.setValue("oneTabOnly", ui->oneTabOnlyCheckBox->isChecked());
     settings.setValue("numberSymbolIsComma", ui->useCommasInNumbersCheckBox->isChecked());
@@ -1045,6 +1048,3 @@ void SettingsDialog::reject()
     QDialog::reject();
 
 }
-
-
-

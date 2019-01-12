@@ -85,6 +85,7 @@ void addChildSeparator(){emit actionSignal("addChildSeparator", m_id);}
        void setBadgeText();
        void setStatus();
        void showOverview();
+       void sortAlpha();
     // for trash :
     void displayEmptyTrashDialog();
 
@@ -118,7 +119,8 @@ QDomElement targetedElement;
     *emptyTrashAct,
     *displayBadgeAct,
     *setBadgeTextAct,
-    *showOverviewAct;
+    *showOverviewAct,
+    *sortAlphaAct;
 
 QString splitChoice;
 

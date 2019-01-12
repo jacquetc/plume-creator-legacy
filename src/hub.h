@@ -137,7 +137,6 @@ signals:
 
 public slots:
     bool startProject(QString file);
-    void addToSaveQueue();
     void resetSpreadsheetOutliner(){emit resetSpreadsheetOutlinerSignal();}
 
     // spell check :
@@ -149,6 +148,7 @@ public slots:
     void openSheet(int id);
     void saveProject(QString mode = "");
 
+    void applyConfig();
 private slots:
     void unlockFiles();
     void lockFiles();
@@ -186,6 +186,7 @@ bool filesLocked;
     void loadAttendDocs(QDomNodeList list);
     int saveStack;
     QList<int> timerIdList;
+    void restartSaveTimer();
     void stopSaveTimer();
 
     int settingNumber;

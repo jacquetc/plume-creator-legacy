@@ -183,7 +183,6 @@ void AttendSheetTreeProxyModel::removeSheetObjects(QList<int> objectsList)
 
 
     hub->resetSpreadsheetOutliner();
-    hub->addToSaveQueue();
     this->dataChanged(clickedProxyIndex.parent(),clickedProxyIndex);
 
     invalidateFilter();
@@ -216,8 +215,6 @@ void AttendSheetTreeProxyModel::addSheetObjects(QList<int> objectsList)
     //    qDebug() << "attendList.size : " << QString::number(attendList.size());
     //    qDebug() << "attendString : " << attendString;
     //    qDebug() << hub->mainTreeDomDoc().toString(5);
-
-    hub->addToSaveQueue();
 
     invalidateFilter();
     nothingWasClicked = true;
@@ -386,8 +383,6 @@ void AttendSheetTreeProxyModel::setPointOfView()
         povString.append("-" + QString::number(number));
 
     openedElement.setAttribute("pov", povString);
-
-    hub->addToSaveQueue();
 
 
     hub->resetSpreadsheetOutliner();

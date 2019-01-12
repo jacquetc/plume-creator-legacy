@@ -80,7 +80,7 @@ bool DockedTrashTreeProxy::setData(const QModelIndex &index, const QVariant &val
         emit dataChanged(index, index, vector);
 #endif
 
-        hub->addToSaveQueue();
+        
 
         return true;
     }
@@ -218,7 +218,7 @@ bool DockedTrashTreeProxy::dropMimeData ( const QMimeData * data, Qt::DropAction
         Utils::applyAttributeRecursively(draggedElement, "isTrashed", "yes");
 
 
-        hub->addToSaveQueue();
+        
         emit resetAbsModelSignal();
 
 

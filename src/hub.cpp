@@ -1,4 +1,5 @@
 #include "hub.h"
+#include <QSettings>
 
 Hub::Hub(QWidget *parent) :
     QWidget(parent),
@@ -134,7 +135,6 @@ void Hub::setUserDict(QStringList userDict)
 
     emit spellDictsChangedSignal(m_spellDictPath , m_userDict);
 
-    this->addToSaveQueue();
 }
 //--------------------------------------------------------------------------------
 QString Hub::spellDictPath()
@@ -645,6 +645,10 @@ bool Hub::loadTemp()
     QApplication::restoreOverrideCursor();
     m_project->unlockRefresh();
 
+    // backup timer:
+    this->restartSaveTimer();
+
+
 
     return true;
 }
@@ -800,13 +804,15 @@ void Hub::saveProject(QString mode)
 
     this->saveTemp();
 
-
-
     Zipper *zipper = new Zipper();
     zipper->setFileListToCheck(zipChecker->list());
-    zipper->setJob("compress", m_project->projectFileName(), m_project->projectWorkPath());
+    if(mode == "backup"){
+        zipper->setJob("compress", m_project->projectBackupFileName(), m_project->projectWorkPath());
+    }
+    else{
+        zipper->setJob("compress", m_project->projectFileName(), m_project->projectWorkPath());
+    }
     connect(zipper, SIGNAL(zipFinished()), this, SLOT(unlockFiles()));
-
 
 
     if(mode == "wait"){
@@ -818,6 +824,7 @@ void Hub::saveProject(QString mode)
         zipper->start(QThread::LowestPriority);
         this->showStatusBarMessage(tr("Project saved"));
     }
+    //zipper
 
 }
 //--------------------------------------------------------------------------------------
@@ -998,27 +1005,6 @@ bool Hub::saveDoc(QTextDocument *doc, QString mode)
     return written;
 }
 
-void Hub::addToSaveQueue()
-{
-    if(this->areFilesLocked()){
-        saveStack += 1; // add more time before the next saving...
-    }
-
-    saveStack += 1;
-
-    if(saveStack == 1)
-        timerIdList.append(this->startTimer(2000));
-    else if(saveStack > 1){  // reset if more than one save demand
-        for(int i = 0; i < timerIdList.size(); ++i){
-            this->killTimer(timerIdList.at(i));
-        }
-        timerIdList.clear();
-        timerIdList.append(this->startTimer(4000));
-    }
-
-
-
-}
 void Hub::stopSaveTimer()
 {
     saveStack = 0;
@@ -1027,20 +1013,42 @@ void Hub::stopSaveTimer()
         this->killTimer(timerIdList.at(i));
     }
     timerIdList.clear();
+
+}
+void Hub::restartSaveTimer()
+{
+    saveStack = 0;
+
+    for(int i = 0; i < timerIdList.size(); ++i){
+        this->killTimer(timerIdList.at(i));
+    }
+    timerIdList.clear();
+
+    QSettings setting;
+    this->startTimer(setting.value("Settings/backupTime", 1800000).toInt());
 }
 void Hub::timerEvent(QTimerEvent *event)
 {
+
     //    timerIdList.removeAll(event->timerId());
 
 
-    qDebug() << " -------- time to save !";
-    this->saveProject();
+    qDebug() << " -------- saving backup !";
+    this->saveProject("backup");
     emit textAlreadyChangedSignal(false);
-    stopSaveTimer();
+    restartSaveTimer();
 
 }
 
+//---------------------------------------------------------------------------
+//----------Apply Config---------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------
 
+
+void Hub::applyConfig()
+{
+    restartSaveTimer();
+}
 
 void Hub::showStatusBarMessage(QString string, int time)
 {
@@ -1228,7 +1236,6 @@ void Hub::saveCursorPos(int textCursorPosition, int synCursorPosition, int noteC
     element.setAttribute("noteCursorPos", noteCursorPosition);
     //   this->write(deviceFile);
 
-    this->addToSaveQueue();
 
 }
 

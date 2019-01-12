@@ -24,6 +24,8 @@ public:
     QString projectFileName() const;
     void setProjectFileName(QString projectFileName);
     QString projectWorkPath() const;
+    QString projectBackupFileName() const;
+
     bool isProjectOpened() const;
     void setIsProjectOpened(bool value);
 

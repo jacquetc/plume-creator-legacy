@@ -35,7 +35,6 @@ bool AttendManagerTreeProxyModel::setData(const QModelIndex &index,
 
         invalidateFilter();
 
-        hub->addToSaveQueue();
 
         return true;
     }
@@ -61,7 +60,6 @@ bool AttendManagerTreeProxyModel::setData(const QModelIndex &index,
         emit dataChanged(index, index, vector);
 #endif
 
-        hub->addToSaveQueue();
 
         return true;
     }
@@ -226,7 +224,6 @@ void AttendManagerTreeProxyModel::addObject(QModelIndex index)
     hub->addFileToZipList("attend", number );
 
 
-    hub->addToSaveQueue();
     emit resetAbsModelSignal();
     this->domModified();
 
@@ -287,7 +284,6 @@ void AttendManagerTreeProxyModel::addGroup(QModelIndex index)
 
     hub->addFileToZipList("attend", number );
 
-    hub->addToSaveQueue();
     emit resetAbsModelSignal();
     this->domModified();
 
@@ -376,7 +372,6 @@ if(oldChild.isNull())
 
     hub->removeFileFromZipList("attend", number );
 
-    hub->addToSaveQueue();
     emit resetAbsModelSignal();
     this->domModified();
 
@@ -593,7 +588,6 @@ bool AttendManagerTreeProxyModel::dropMimeData ( const QMimeData * data, Qt::Dro
 
 
 
-        hub->addToSaveQueue();
         emit resetAbsModelSignal();
 
 

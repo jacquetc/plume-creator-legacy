@@ -267,7 +267,6 @@ void AttendManager::saveToElement()
 
     saveToAttendTreeItem();
 
-    hub->addToSaveQueue();
 
 
 

@@ -75,6 +75,28 @@ QString Project::projectWorkPath() const
 }
 
 //--------------------------------------------------------------------------------
+
+QString Project::projectBackupFileName() const
+{
+    QFileInfo info(projectFileName());
+    QString baseName = info.completeBaseName();
+    QString path = info.path() + "/backup";
+    QString backupFileName =  path +  "/" + baseName;
+
+    backupFileName = backupFileName + "_" + QString::number(QDate::currentDate().year())
+             + "_" + QString::number(QDate::currentDate().month())
+            + "_" + QString::number(QDate::currentDate().day())
+            + "_" + QString::number(QDateTime::currentDateTime().time().hour())
+    + "_" + QString::number(QDateTime::currentDateTime().time().minute());
+
+    backupFileName = backupFileName + ".plume_backup";
+
+    return backupFileName;
+}
+
+
+
+//--------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------
 
 

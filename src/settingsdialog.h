@@ -143,7 +143,7 @@ private:
     QStringList displayModes;
     QStringList displayModeCodes;
 
-    int autosaveTime;
+    int autosaveTime, backupTime;
 
     QString displayMode, prev_displayMode;
     bool previousIsPortable;

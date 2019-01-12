@@ -142,7 +142,7 @@ bool CheckableTreeProxy::setData(const QModelIndex &index,
 
         emit dataChanged(index, index);
 
-        hub->addToSaveQueue();
+        
 
         return true;
     }
