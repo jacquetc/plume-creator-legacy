@@ -2,6 +2,7 @@ PLUME CREATOR
 
 v 0.67
         - add a sort action in context menu
+        - fix first start wizard at each start
 
 v 0.66.3
         - update 3rd parties libraries

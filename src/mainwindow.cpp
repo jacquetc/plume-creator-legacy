@@ -1691,6 +1691,7 @@ void MainWindow::applyConfig()
     emit applyConfigSignal();
 
     QSettings settings;
+    settings.setValue("MainWindow/firstStart", false);
     settings.beginGroup( "Settings" );
     autosaveTime = settings.value("autosaveTime", 20000).toInt();
     oneTabOnly = settings.value("oneTabOnly", false).toBool();

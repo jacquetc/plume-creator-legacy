@@ -10,17 +10,21 @@ The simplest way to try it is to open it as project in Qt Creator, then execute 
 
 g++
 make
-qmake
-libqt4-dev
+qt5-qmake
+libqt5multimedia5
+libqt5core5a
+libqt5gui5
+libqt5xml5
+libqt5printsupport5
 libzip-dev
 libhunspell-dev
 
 
 To run it :
 
-libqt4-core
-libqt4-gui
-libqt4-network
+libqt5-core
+libqt5-gui
+libqt5-network
 libzip
 libhunspell
 
