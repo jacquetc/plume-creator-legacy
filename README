@@ -1,8 +1,12 @@
 PLUME CREATOR
 
+v 0.67
+        - add a sort action in context menu
+
 v 0.66.3
         - update 3rd parties libraries
         - add a save button
+        - add a backup option 
 
 v 0.66.2
 	- new feature : overview in the project tree.
