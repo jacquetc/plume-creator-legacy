@@ -1,29 +1,30 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Cyril Jacquet                                   *
- *   cyril.jacquet@plume-creator.eu                                                 *
- *                                                                         *
- *  This file is part of Plume Creator.                                    *
- *                                                                         *
- *  Plume Creator is free software: you can redistribute it and/or modify  *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation, either version 3 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  Plume Creator is distributed in the hope that it will be useful,       *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *  You should have received a copy of the GNU General Public License      *
- *  along with Plume Creator.  If not, see <http://www.gnu.org/licenses/>. *
- ***************************************************************************/
+*   Copyright (C) 2011 by Cyril Jacquet                                   *
+*   cyril.jacquet@plume-creator.eu
+*                                                *
+*                                                                         *
+*  This file is part of Plume Creator.                                    *
+*                                                                         *
+*  Plume Creator is free software: you can redistribute it and/or modify  *
+*  it under the terms of the GNU General Public License as published by   *
+*  the Free Software Foundation, either version 3 of the License, or      *
+*  (at your option) any later version.                                    *
+*                                                                         *
+*  Plume Creator is distributed in the hope that it will be useful,       *
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+*  GNU General Public License for more details.                           *
+*                                                                         *
+*  You should have received a copy of the GNU General Public License      *
+*  along with Plume Creator.  If not, see <http://www.gnu.org/licenses/>. *
+***************************************************************************/
 #ifndef MENUBAR_H
 #define MENUBAR_H
 
 #if QT_VERSION >= 0x050000
-#include <QtWidgets>
-#endif 
-#include <QtGui>   
+# include <QtWidgets>
+#endif // if QT_VERSION >= 0x050000
+#include <QtGui>
 #include <QWidget>
 
 #include "hub.h"
@@ -37,27 +38,27 @@
 #include "mainTree/maintreeabstractmodel.h"
 
 //
-class MenuBar : public QObject
-{
+class MenuBar : public QObject {
     Q_OBJECT
+
 public:
+
     explicit MenuBar(QWidget *parent = 0);
-void createContent();
+    void createContent();
 
     void openStartCenter()
     {
         startCenter();
     }
 
-
     void firstLaunch()
     {
         readSettings();
     }
+
     void launchCheckUpdateDialog(QString mode = "none");
 
 protected:
-
 
 signals:
 
@@ -75,65 +76,84 @@ signals:
     void launchCheckUpdateSignal(QString mode);
 
 
-    //repeater between Dialog Settings and MainWindow
-    void setDisplayModeSignal(QString mode, bool isToolBarInStatusBar);
-void changeAllDocsTextStylesSignal();
-void applyStyleSheetSignal();
+    // repeater between Dialog Settings and MainWindow
+    void setDisplayModeSignal(QString mode,
+                              bool    isToolBarInStatusBar);
+    void changeAllDocsTextStylesSignal();
+    void applyStyleSheetSignal();
 
     // repeater to join editWidget to MainWindow :
 
 
-void widthChangedSignal(int width);
-void textFontChangedSignal(QFont font);
-void textHeightChangedSignal(int textHeight);
-void setStyleSelectionSignal(int);
+    void widthChangedSignal(int width);
+    void textFontChangedSignal(QFont font);
+    void textHeightChangedSignal(int textHeight);
+    void setStyleSelectionSignal(int);
 
-void charFormatChangedSlotSignal(QTextCharFormat charFmt);
- void tabWidgetChangedSlotSignal(int newTabWidth);
-void tabWitdhChangedSlotSignal(int);
-void styleSelectedSignal(int styleIndex);
+    void charFormatChangedSlotSignal(QTextCharFormat charFmt);
+    void tabWidgetChangedSlotSignal(int newTabWidth);
+    void tabWitdhChangedSlotSignal(int);
+    void styleSelectedSignal(int styleIndex);
 
 
-//docks actions :
-void showTreeDockSignal(bool treeBool);
-void showNotesDockSignal(bool notesBool);
-void showAttendDockSignal(bool attendBool);
-void showToolsDockSignal(bool toolsBool);
-void launchOutlinerSignal();
-void showFullscreenSignal();
+    // docks actions :
+    void showTreeDockSignal(bool treeBool);
+    void showNotesDockSignal(bool notesBool);
+    void showAttendDockSignal(bool attendBool);
+    void showToolsDockSignal(bool toolsBool);
+    void launchOutlinerSignal();
+    void showFullscreenSignal();
 
 public slots:
 
-
-    void openNewProjectSlot();
-QMenuBar *createMenuBar();
-
-
-////repeater for editWidget :
-//void tabChangedSlot(QTextCharFormat newTabFormat){editWidget->tabChangedSlot(newTabFormat);}
+    void      openNewProjectSlot();
+    QMenuBar* createMenuBar();
 
 
-void applyConfig();
-void setTextStyles(TextStyles *styles){textStyles = styles;}
-void setHub(Hub *varHub){hub = varHub;}
+    ////repeater for editWidget :
+    // void tabChangedSlot(QTextCharFormat
+    // newTabFormat){editWidget->tabChangedSlot(newTabFormat);}
 
 
-//docks actions :
-void setTreeDockAct(bool treeVisible){showTreeDockAct->setChecked(treeVisible);}
-void setNoteDockAct(bool noteVisible){showNotesDockAct->setChecked(noteVisible);}
-void setToolDockAct(bool toolVisible){showToolsDockAct->setChecked(toolVisible);}
-void setAttendDockAct(bool attendVisible){showAttendDockAct->setChecked(attendVisible);}
+    void applyConfig();
+    void setTextStyles(TextStyles *styles) {
+        textStyles = styles;
+    }
 
-void setMenusEnabled(bool enabledBool);
+    void setHub(Hub *varHub) {
+        hub = varHub;
+    }
 
-void setMainTreeAbstractModel(MainTreeAbstractModel *tree){absTreeModel = tree;}
+    // docks actions :
+    void setTreeDockAct(bool treeVisible) {
+        showTreeDockAct->setChecked(treeVisible);
+    }
 
-void exit();
+    void setNoteDockAct(bool noteVisible) {
+        showNotesDockAct->setChecked(noteVisible);
+    }
+
+    void setToolDockAct(bool toolVisible) {
+        showToolsDockAct->setChecked(toolVisible);
+    }
+
+    void setAttendDockAct(bool attendVisible) {
+        showAttendDockAct->setChecked(attendVisible);
+    }
+
+    void setMenusEnabled(bool enabledBool);
+
+    void setMainTreeAbstractModel(MainTreeAbstractModel *tree) {
+        absTreeModel = tree;
+    }
+
+    bool exit();
 
 private slots:
 
     void newProject();
     void startCenter();
+
     //   void open();
     void saveProject();
     void saveProjectAs();
@@ -147,67 +167,68 @@ private slots:
     void about();
     void viewReleaseNotes();
     void viewCredits();
-    void checkUpdate(){ launchCheckUpdateDialog("none"); }
+    void checkUpdate() {
+        launchCheckUpdateDialog("none");
+    }
 
     void createEditWidget();
 
-
 private:
+
     Hub *hub;
-    MainTreeAbstractModel  *absTreeModel;
+    MainTreeAbstractModel *absTreeModel;
 
     QWidget *parentWidget;
-QString currentVersion;
-bool projectAlreadyOpened;
+    QString currentVersion;
+    bool projectAlreadyOpened;
 
     QToolButton *newProjectButton,
+
     //   *openButton,
-    *displayConfigButton,
-    *closeProjectButton,
-    *exitButton,
-    *printButton,
-    *exportButton,
-    *findReplaceButton,
-    *aboutQtButton,
-    *aboutButton,
-    *updaterButton;
+                *displayConfigButton,
+                *closeProjectButton,
+                *exitButton,
+                *printButton,
+                *exportButton,
+                *findReplaceButton,
+                *aboutQtButton,
+                *aboutButton,
+                *updaterButton;
 
     QAction *newProjectAct,
-    *startCenterAct,
+            *startCenterAct,
+
     //   *openAct,
-    *displayConfigAct,
-    *saveProjectAct,
-    *saveProjectAsAct,
-    *closeProjectAct,
-    *exitAct,
-    *printAct,
-    *exportAct,
-    *findReplaceAct, *manageStylesAct,
-    *aboutQtAct,
-    *aboutAct,
-    *viewReleaseNotesAct,
-    *viewCreditsAct,
-    *updaterAct,
-   *showTreeDockAct, *showNotesDockAct, *showAttendDockAct, *showToolsDockAct, *launchOutlinerAct, *showFullscreenAct;
+            *displayConfigAct,
+            *saveProjectAct,
+            *saveProjectAsAct,
+            *closeProjectAct,
+            *exitAct,
+            *printAct,
+            *exportAct,
+            *findReplaceAct, *manageStylesAct,
+            *aboutQtAct,
+            *aboutAct,
+            *viewReleaseNotesAct,
+            *viewCreditsAct,
+            *updaterAct,
+            *showTreeDockAct, *showNotesDockAct, *showAttendDockAct, *showToolsDockAct,
+            *launchOutlinerAct, *showFullscreenAct;
 
-QMenu *projectGroup, *editGroup, *helpGroup, *viewGroup;
+    QMenu *projectGroup, *editGroup, *helpGroup, *viewGroup;
 
-EditMenu *editWidget;
-TextStyles *textStyles;
+    EditMenu *editWidget;
+    TextStyles *textStyles;
 
     void createActions();
     void createButtons();
 
-    //settings
+    // settings
     void readSettings();
     void writeSettings();
 
-    //style :
+    // style :
     void giveStyle();
-
-
-
-
 };
 
 #endif // MENUBAR_H

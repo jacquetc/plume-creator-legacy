@@ -2,16 +2,13 @@
 
 //
 MenuBar::MenuBar(QWidget *parent) :
-    QObject(parent),parentWidget(parent), currentVersion(QApplication::applicationVersion()), projectAlreadyOpened(false)
+    QObject(parent), parentWidget(parent), currentVersion(
+        QApplication::applicationVersion()), projectAlreadyOpened(false)
 {
-
     giveStyle();
-
-
-
-
 }
-//---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
 
 void MenuBar::createContent()
 {
@@ -22,28 +19,28 @@ void MenuBar::createContent()
     readSettings();
     setMenusEnabled(false);
 }
-//---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
 
 void MenuBar::newProject()
 {
     NewProjectWizard *projectWizard = new NewProjectWizard(parentWidget);
-    if(projectWizard->exec()){
+
+    if (projectWizard->exec()) {
         hub->startProject(projectWizard->newProjectFileName());
         emit createNewStructureSignal(projectWizard->structureToCreate());
     }
-
-
 }
 
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
-//void MenuBar::open()
-//{
+// void MenuBar::open()
+// {
 //    QString fileName =
 //            QFileDialog::getOpenFileName(this, tr("Open Project File"),
 //                                         QDir::homePath(),
-//                                         tr(".Plume Creator Files (*.plume)"));
-
+//                                         tr(".Plume Creator Files
+// (*.plume)"));
 
 
 //    if (fileName.isEmpty())
@@ -64,8 +61,10 @@ void MenuBar::newProject()
 
 
 //    //        QMessageBox::warning(this, tr("Plume Creator File"),
-//    //                             tr("This project has been closed abruptly. Plume Creator will try to recuperate this project."));
-//    //        connect(this, SIGNAL(openProjectSignal(QFile*)), treeDock, SLOT(openProjectSlot(QFile*)));
+//    //                             tr("This project has been closed abruptly.
+// Plume Creator will try to recuperate this project."));
+//    //        connect(this, SIGNAL(openProjectSignal(QFile*)), treeDock,
+// SLOT(openProjectSlot(QFile*)));
 //    //        emit openProjectSignal(tempDomFile);
 
 //    //        tempDomFile->close();
@@ -87,59 +86,68 @@ void MenuBar::newProject()
 //    file->close();
 
 //    //    }
-//}
+// }
 
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 
 void MenuBar::startCenter()
 {
     StartCenter *center = new StartCenter(parentWidget);
+
     center->setHub(hub);
     center->postConstructor();
-    connect(center,SIGNAL(newPrjSignal()), this, SLOT(openNewProjectSlot()));
+    connect(center, SIGNAL(newPrjSignal()), this, SLOT(openNewProjectSlot()));
 
     center->setModal(true);
     center->exec();
 }
 
-
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 void MenuBar::saveProject()
 {
     hub->saveProject();
 }
 
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 void MenuBar::saveProjectAs()
-{
+{}
 
-}
-
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 
 void MenuBar::displayConfig(int tabIndex)
 {
     SettingsDialog *settingsDialog = new SettingsDialog(parentWidget);
+
     settingsDialog->setHub(hub);
     settingsDialog->setTextStyles(textStyles);
     textStyles->saveBaseStyles();
     settingsDialog->createContent();
 
-    connect(settingsDialog, SIGNAL(accepted()), this, SLOT(applyConfig()));
-    connect(settingsDialog, SIGNAL(setDisplayModeSignal(QString, bool)), this, SIGNAL(setDisplayModeSignal(QString, bool)));
-    connect(settingsDialog, SIGNAL(changeAllDocsTextStylesSignal()), textStyles, SLOT(changeAllDocsTextStyles()));
-    connect(settingsDialog, SIGNAL(spellDictsChangedSignal(QString)), hub, SLOT(spellDictsChangedSlot(QString)));
-    connect(settingsDialog, SIGNAL(applyStyleSheetSignal()), this, SIGNAL(applyStyleSheetSignal()));
+    connect(settingsDialog, SIGNAL(accepted()), this,
+            SLOT(applyConfig()));
+    connect(settingsDialog,
+            SIGNAL(setDisplayModeSignal(QString,bool)),
+            this,
+            SIGNAL(setDisplayModeSignal(QString,bool)));
+    connect(settingsDialog, SIGNAL(changeAllDocsTextStylesSignal()), textStyles,
+            SLOT(changeAllDocsTextStyles()));
+    connect(settingsDialog, SIGNAL(spellDictsChangedSignal(QString)), hub,
+            SLOT(spellDictsChangedSlot(QString)));
+    connect(settingsDialog,
+            SIGNAL(applyStyleSheetSignal()),
+            this,
+            SIGNAL(applyStyleSheetSignal()));
 
 
     settingsDialog->setCurrentTab(tabIndex);
 
     settingsDialog->setModal(true);
     settingsDialog->exec();
+
     //    //    Config config;
     //    ConfigDialog dialog(/*config, */this);
     //    if (dialog.exec() == QDialog::Accepted) {
@@ -147,8 +155,7 @@ void MenuBar::displayConfig(int tabIndex)
     //    }
 }
 
-
-//--------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
 
 bool MenuBar::closeProject()
@@ -160,9 +167,11 @@ bool MenuBar::closeProject()
     //        return;
 
     QMessageBox msgBox(parentWidget);
+
     msgBox.setText(tr("Do you want to save the current project ?"));
     msgBox.setInformativeText(tr(""));
-    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.setStandardButtons(
+        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
     msgBox.setDefaultButton(QMessageBox::Cancel);
     int ret = msgBox.exec();
 
@@ -181,43 +190,39 @@ bool MenuBar::closeProject()
 
     case QMessageBox::Cancel:
         return false;
+
         break;
+
     default:
+
         // should never be reached
         break;
     }
 
     return true;
-
-
-
-
-
 }
 
-//--------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
 
 void MenuBar::exporter()
 {
-
     emit saveProjectSignal();
 
     Exporter *exporterDialog = new Exporter(QString("export"), parentWidget);
+
     exporterDialog->setHub(hub);
     exporterDialog->setMainTreeAbstractModel(absTreeModel);
     exporterDialog->postConstructor();
     exporterDialog->exec();
-
 }
 
-//--------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
 
 void MenuBar::print()
 {
-    if(!hub->project()->isProjectOpened())
-        return;
+    if (!hub->project()->isProjectOpened()) return;
 
     emit saveProjectSignal();
 
@@ -226,16 +231,14 @@ void MenuBar::print()
     exporterDialog->setMainTreeAbstractModel(absTreeModel);
     exporterDialog->postConstructor();
     exporterDialog->exec();
-
 }
-//--------------------------------------------------------------------------
 
+// --------------------------------------------------------------------------
 
 
 void MenuBar::findAndReplace()
 {
-    if(!hub->project()->isProjectOpened())
-        return;
+    if (!hub->project()->isProjectOpened()) return;
 
     emit saveProjectSignal();
 
@@ -245,37 +248,30 @@ void MenuBar::findAndReplace()
     findReplaceDialog->setTextStyles(textStyles);
     findReplaceDialog->postConstructor();
     findReplaceDialog->exec();
-
 }
 
-//--------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
 void MenuBar::manageStyles()
 {
     this->displayConfig(2);
-
-
 }
 
-//--------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
 void MenuBar::aboutQt()
 {
     QMessageBox::aboutQt(parentWidget, tr("About Qt"));
-
-
-
 }
 
-//--------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
 void MenuBar::viewReleaseNotes()
 {
-
-
     QDialog *relNotesDialog = new QDialog(parentWidget);
+
     relNotesDialog->setWindowTitle(tr("Release Notes"));
-    relNotesDialog->setMinimumSize(600,400);
+    relNotesDialog->setMinimumSize(600, 400);
 
 
     QVBoxLayout *layout = new QVBoxLayout;
@@ -283,10 +279,9 @@ void MenuBar::viewReleaseNotes()
     QLabel *relNotesText = new QLabel();
 
 
-
     QFile *readmeFile = new QFile(":/README");
     readmeFile->open(QFile::ReadOnly | QFile::Text);
-    QTextStream textFileStream( readmeFile );
+    QTextStream textFileStream(readmeFile);
 
     QPlainTextEdit *textViewer = new QPlainTextEdit(textFileStream.readAll());
     readmeFile->close();
@@ -304,18 +299,16 @@ void MenuBar::viewReleaseNotes()
     relNotesDialog->setLayout(layout);
 
     relNotesDialog->exec();
-
-
 }
-//--------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
 
 void MenuBar::viewCredits()
 {
-
-
     QDialog *creditsDialog = new QDialog(parentWidget);
+
     creditsDialog->setWindowTitle(tr("Credits"));
-    creditsDialog->setMinimumSize(600,400);
+    creditsDialog->setMinimumSize(600, 400);
 
 
     QVBoxLayout *layout = new QVBoxLayout;
@@ -323,10 +316,9 @@ void MenuBar::viewCredits()
     QLabel *creditsText = new QLabel();
 
 
-
     QFile *creditsFile = new QFile(":/Credits");
     creditsFile->open(QFile::ReadOnly | QFile::Text);
-    QTextStream textFileStream( creditsFile );
+    QTextStream textFileStream(creditsFile);
 
     QPlainTextEdit *textViewer = new QPlainTextEdit(textFileStream.readAll());
     creditsFile->close();
@@ -344,15 +336,15 @@ void MenuBar::viewCredits()
     creditsDialog->setLayout(layout);
 
     creditsDialog->exec();
-
-
 }
 
-//----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 void MenuBar::about()
 {
-    QMessageBox::about(parentWidget, tr("About Plume Creator"),
+    QMessageBox::about(parentWidget,
+                       tr(
+                           "About Plume Creator"),
                        "<p><center><b>Plume Creator</b></p>"
                        "<p><b>A Project Manager and Rich Text Editor for Writers.</b></p>"
 
@@ -360,62 +352,56 @@ void MenuBar::about()
 
                                                         "<p><center><address><a href=http://www.plume-creator.eu>http://www.plume-creator.eu</a></address></center></p>"
 
-                                                        "<p>Copyright (C)" + QString::number(QDate::currentDate().year())   +", created by Cyril Jacquet</p>"
-                                                                                                                             "<p>cyril.jacquet@plume-creator.eu</p></center>"
-                                                                                                                             "<br>"
-                                                                                                                             "<p>Plume Creator is free software: you can redistribute it and/or modify "
-                                                                                                                             "it under the terms of the GNU General Public License as published by "
-                                                                                                                             "the Free Software Foundation, either version 3 of the License, or "
-                                                                                                                             "(at your option) any later version.</p> "
-                                                                                                                             "<br>"
-                                                                                                                             "<p>Plume Creator is distributed in the hope that it will be useful, "
-                                                                                                                             "but WITHOUT ANY WARRANTY; without even the implied warranty of "
-                                                                                                                             "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
-                                                                                                                             "GNU General Public License for more details.</p>"
-                                                                                                                             "<br>"
-                                                                                                                             "<p>You should have received a copy of the GNU General Public License "
-                                                                                                                             "along with Plume Creator.  If not, see <address>http://www.gnu.org/licenses</address>.</p>"
+                                                        "<p>Copyright (C)" +
+                       QString::number(
+                           QDate::currentDate().year())   + ", created by Cyril Jacquet</p>"
+                                                            "<p>cyril.jacquet@plume-creator.eu</p></center>"
+                                                            "<br>"
+                                                            "<p>Plume Creator is free software: you can redistribute it and/or modify "
+                                                            "it under the terms of the GNU General Public License as published by "
+                                                            "the Free Software Foundation, either version 3 of the License, or "
+                                                            "(at your option) any later version.</p> "
+                                                            "<br>"
+                                                            "<p>Plume Creator is distributed in the hope that it will be useful, "
+                                                            "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+                                                            "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
+                                                            "GNU General Public License for more details.</p>"
+                                                            "<br>"
+                                                            "<p>You should have received a copy of the GNU General Public License "
+                                                            "along with Plume Creator.  If not, see <address>http://www.gnu.org/licenses</address>.</p>"
                        );
-
-
 }
 
-
-//--------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
 
 void MenuBar::launchCheckUpdateDialog(QString mode)
 {
     emit launchCheckUpdateSignal(mode);
-
 }
-//--------------------------------------------------------------------------
 
-void MenuBar::exit()
+// --------------------------------------------------------------------------
+
+bool MenuBar::exit()
 {
-    if(projectAlreadyOpened){
+    if (projectAlreadyOpened) {
         bool value = closeProject();
-        if(!value){
-            return;
+
+        if (!value) {
+            return false;
         }
     }
 
     writeSettings();
     emit exitSignal();
-
-
+    return true;
 }
 
+// ---------------------------------------------------------------------------
 
 
-
-
-//---------------------------------------------------------------------------
-
-
-QMenuBar *MenuBar::createMenuBar()
+QMenuBar * MenuBar::createMenuBar()
 {
-
     QMenuBar *menubar = new QMenuBar();
 
     createActions();
@@ -428,68 +414,78 @@ QMenuBar *MenuBar::createMenuBar()
     return menubar;
 }
 
-
-
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 
 void MenuBar::createActions()
 {
-    newProjectAct = new QAction(QIcon(":/pics/tools-wizard.png"),tr("&New Project"), this);
+    newProjectAct =
+        new QAction(QIcon(":/pics/tools-wizard.png"), tr("&New Project"), this);
     newProjectAct->setShortcut(QKeySequence::New);
     newProjectAct->setToolTip(tr("Create a new project"));
     connect(newProjectAct, SIGNAL(triggered()), this, SLOT(newProject()));
 
-    startCenterAct = new QAction(QIcon(":/pics/go-home.png"),tr("Start &Center"), this);
+    startCenterAct = new QAction(QIcon(":/pics/go-home.png"), tr("Start &Center"), this);
+
     // projectManagerAct->setShortcut(QKeySequence::New);
     startCenterAct->setToolTip(tr("Create and manage your projects"));
     connect(startCenterAct, SIGNAL(triggered()), this, SLOT(startCenter()));
 
 
-    displayConfigAct = new QAction(QIcon(":/pics/configure.png"),tr("&Configure"), this);
+    displayConfigAct = new QAction(QIcon(":/pics/configure.png"), tr("&Configure"), this);
+
     //    displayConfigAct->setShortcut(QKeySequence::Print);
     displayConfigAct->setToolTip(tr("Display the configuration"));
     connect(displayConfigAct, SIGNAL(triggered()), this, SLOT(displayConfig()));
 
-    saveProjectAct = new QAction(QIcon(":/pics/document-save.svg"),tr("&Save Project"), this);
+    saveProjectAct = new QAction(QIcon(":/pics/document-save.svg"),
+                                 tr("&Save Project"),
+                                 this);
     saveProjectAct->setShortcut(QKeySequence::Save);
     saveProjectAct->setToolTip(tr("Save the current project"));
     connect(saveProjectAct, SIGNAL(triggered()), this, SLOT(saveProject()));
 
-    //    saveProjectAsAct = new QAction(QIcon(":/pics/document-save-as.svg"),tr("&Save Project as"), this);
+    //    saveProjectAsAct = new
+    // QAction(QIcon(":/pics/document-save-as.svg"),tr("&Save Project as"),
+    // this);
     //    saveProjectAsAct->setShortcut(QKeySequence::SaveAs);
     //    saveProjectAsAct->setToolTip(tr("Save the current project as..."));
-    //    connect(saveProjectAsAct, SIGNAL(triggered()), this, SLOT(saveProjectAs()));
+    //    connect(saveProjectAsAct, SIGNAL(triggered()), this,
+    // SLOT(saveProjectAs()));
 
 
-    exportAct = new QAction(QIcon(":/pics/document-export.png"),tr("&Export"), this);
+    exportAct = new QAction(QIcon(":/pics/document-export.png"), tr("&Export"), this);
+
     //   exportAct->setShortcut(QKeySequence::Print);
     exportAct->setToolTip(tr("Export the project"));
     connect(exportAct, SIGNAL(triggered()), this, SLOT(exporter()));
 
-    printAct = new QAction(QIcon(":/pics/document-print.png"),tr("&Print"), this);
+    printAct = new QAction(QIcon(":/pics/document-print.png"), tr("&Print"), this);
     printAct->setShortcut(QKeySequence::Print);
     printAct->setToolTip(tr("Print part of the project"));
     connect(printAct, SIGNAL(triggered()), this, SLOT(print()));
 
-    closeProjectAct = new QAction(QIcon(":/pics/window-close.png"),tr("&Close project"), this);
+    closeProjectAct = new QAction(QIcon(":/pics/window-close.png"),
+                                  tr("&Close project"),
+                                  this);
     closeProjectAct->setShortcut(QKeySequence::Close);
     closeProjectAct->setToolTip(tr("Print the document"));
-    connect(closeProjectAct, SIGNAL(triggered()), this, SLOT(closeProject()));;
+    connect(closeProjectAct, SIGNAL(triggered()), this, SLOT(closeProject()));
 
-    exitAct = new QAction(QIcon(":/pics/application-exit.png"),tr("E&xit"), this);
+    exitAct = new QAction(QIcon(":/pics/application-exit.png"), tr("E&xit"), this);
     exitAct->setShortcut(QKeySequence::Quit);
     exitAct->setToolTip(tr("Exit the application"));
     connect(exitAct, SIGNAL(triggered()), this, SLOT(exit()));
 
 
-    projectGroup = new QMenu(tr("&Project"),parentWidget);
+    projectGroup = new QMenu(tr("&Project"), parentWidget);
     projectGroup->addAction(startCenterAct);
     projectGroup->addSeparator();
     projectGroup->addAction(newProjectAct);
     projectGroup->addSeparator();
     projectGroup->addAction(saveProjectAct);
-    //projectGroup->addAction(saveProjectAsAct);
+
+    // projectGroup->addAction(saveProjectAsAct);
     projectGroup->addSeparator();
     projectGroup->addAction(displayConfigAct);
     projectGroup->addSeparator();
@@ -499,7 +495,9 @@ void MenuBar::createActions()
     projectGroup->addAction(closeProjectAct);
     projectGroup->addAction(exitAct);
 
-    findReplaceAct = new QAction(QIcon(":/pics/edit-find-replace.png"),tr("&Find && Replace"),this);
+    findReplaceAct =
+        new QAction(QIcon(":/pics/edit-find-replace.png"), tr("&Find && Replace"), this);
+
     // aboutAct->setShortcut(QKeySequence::Quit);
     findReplaceAct->setToolTip(tr("Find && Replace Dialog"));
     connect(findReplaceAct, SIGNAL(triggered()), this, SLOT(findAndReplace()));
@@ -508,53 +506,70 @@ void MenuBar::createActions()
     //    QWidgetAction *editWidgetAct = new QWidgetAction(this);
     //    editWidgetAct->setDefaultWidget(editWidget);
 
-    manageStylesAct = new QAction(/*QIcon(":/pics/edit-find-replace.png"),*/tr("Manage &Styles"),this);
+    manageStylesAct =
+        new QAction(/*QIcon(":/pics/edit-find-replace.png"),*/ tr("Manage &Styles"),
+                                                               this);
     manageStylesAct->setShortcut(Qt::Key_F7);
     manageStylesAct->setToolTip(tr("Manage the styles"));
     connect(manageStylesAct, SIGNAL(triggered()), this, SLOT(manageStyles()));
 
-    editGroup = new QMenu(tr("&Edit"),parentWidget);
+    editGroup = new QMenu(tr("&Edit"), parentWidget);
     editGroup->addAction(findReplaceAct);
     editGroup->addSeparator();
+
     //    editGroup->addAction(editWidgetAct);
     editGroup->addAction(manageStylesAct);
 
-    showTreeDockAct = new QAction(QIcon(":/pics/view-list-tree.png"),tr("&Project"),this);
+    showTreeDockAct =
+        new QAction(QIcon(":/pics/view-list-tree.png"), tr("&Project"), this);
     showTreeDockAct->setCheckable(true);
     showTreeDockAct->setShortcut(Qt::Key_F5);
     showTreeDockAct->setToolTip(tr("Show the project dock"));
-    connect(showTreeDockAct, SIGNAL(toggled(bool)), this, SIGNAL(showTreeDockSignal(bool)));
+    connect(showTreeDockAct, SIGNAL(toggled(bool)), this,
+            SIGNAL(showTreeDockSignal(bool)));
 
-    showNotesDockAct = new QAction(QIcon(":/pics/im-status-message-edit.png"),tr("&Notes"),this);
+    showNotesDockAct = new QAction(QIcon(":/pics/im-status-message-edit.png"),
+                                   tr("&Notes"),
+                                   this);
     showNotesDockAct->setCheckable(true);
     showNotesDockAct->setShortcut(Qt::Key_F2);
     showNotesDockAct->setToolTip(tr("Show the note dock"));
-    connect(showNotesDockAct, SIGNAL(toggled(bool)), this, SIGNAL(showNotesDockSignal(bool)));
+    connect(showNotesDockAct, SIGNAL(toggled(bool)), this,
+            SIGNAL(showNotesDockSignal(bool)));
 
-    showAttendDockAct = new QAction(QIcon(":/pics/meeting-organizer.png"),tr("&Attendance"),this);
+    showAttendDockAct =
+        new QAction(QIcon(":/pics/meeting-organizer.png"), tr("&Attendance"), this);
     showAttendDockAct->setCheckable(true);
     showAttendDockAct->setShortcut(Qt::Key_F5);
     showAttendDockAct->setToolTip(tr("Show the attendance dock"));
-    connect(showAttendDockAct, SIGNAL(toggled(bool)), this, SIGNAL(showAttendDockSignal(bool)));
+    connect(showAttendDockAct, SIGNAL(toggled(bool)), this,
+            SIGNAL(showAttendDockSignal(bool)));
 
-    showToolsDockAct = new QAction(QIcon(":/pics/preferences-system.png"),tr("&Tools"),this);
+    showToolsDockAct = new QAction(QIcon(":/pics/preferences-system.png"),
+                                   tr("&Tools"),
+                                   this);
     showToolsDockAct->setCheckable(true);
     showToolsDockAct->setShortcut(Qt::Key_F4);
     showToolsDockAct->setToolTip(tr("Show the tool dock"));
-    connect(showToolsDockAct, SIGNAL(toggled(bool)), this, SIGNAL(showToolsDockSignal(bool)));
+    connect(showToolsDockAct, SIGNAL(toggled(bool)), this,
+            SIGNAL(showToolsDockSignal(bool)));
 
-    launchOutlinerAct = new QAction(QIcon(":/pics/view-time-schedule.png"),tr("&Workbench"),this);
+    launchOutlinerAct =
+        new QAction(QIcon(":/pics/view-time-schedule.png"), tr("&Workbench"), this);
     launchOutlinerAct->setShortcut(Qt::Key_F6);
     launchOutlinerAct->setToolTip(tr("Show the workbench"));
     connect(launchOutlinerAct, SIGNAL(triggered()), this, SIGNAL(launchOutlinerSignal()));
 
-    showFullscreenAct = new QAction(QIcon(":/pics/view-fullscreen.png"),tr("&Fullscreen"), this);
+    showFullscreenAct = new QAction(QIcon(":/pics/view-fullscreen.png"),
+                                    tr("&Fullscreen"),
+                                    this);
     showFullscreenAct->setShortcut(Qt::Key_F11);
     showFullscreenAct->setToolTip(tr("Edit fullscreen"));
     connect(showFullscreenAct, SIGNAL(triggered()), this, SIGNAL(showFullscreenSignal()));
 
     viewGroup = new QMenu(tr("&View"));
-    //viewGroup->addAction(showTreeDockAct);
+
+    // viewGroup->addAction(showTreeDockAct);
     viewGroup->addAction(showNotesDockAct);
     viewGroup->addAction(showAttendDockAct);
     viewGroup->addAction(showToolsDockAct);
@@ -563,33 +578,37 @@ void MenuBar::createActions()
     viewGroup->addAction(showFullscreenAct);
 
 
+    aboutAct = new QAction(QIcon(":/pics/help-about.png"), tr("About"), this);
 
-    aboutAct = new QAction(QIcon(":/pics/help-about.png"),tr("About"),this);
     // aboutAct->setShortcut(QKeySequence::Quit);
     aboutAct->setToolTip(tr("about the application"));
     connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
 
-    aboutQtAct = new QAction(tr("About Qt"),this);
+    aboutQtAct = new QAction(tr("About Qt"), this);
+
     // aboutQtAct->setShortcut(QKeySequence::Quit);
     aboutQtAct->setToolTip(tr("about Qt"));
     connect(aboutQtAct, SIGNAL(triggered()), this, SLOT(aboutQt()));
 
-    viewReleaseNotesAct = new QAction(tr("Release notes"),this);
+    viewReleaseNotesAct = new QAction(tr("Release notes"), this);
+
     // aboutQtAct->setShortcut(QKeySequence::Quit);
     viewReleaseNotesAct->setToolTip(tr("Open the Readme with the release notes"));
     connect(viewReleaseNotesAct, SIGNAL(triggered()), this, SLOT(viewReleaseNotes()));
 
-    viewCreditsAct = new QAction(tr("Credits"),this);
+    viewCreditsAct = new QAction(tr("Credits"), this);
+
     // aboutQtAct->setShortcut(QKeySequence::Quit);
     viewCreditsAct->setToolTip(tr("View credits"));
     connect(viewCreditsAct, SIGNAL(triggered()), this, SLOT(viewCredits()));
 
-    updaterAct = new QAction(QIcon(":/pics/download.png"),tr("Check Update"),this);
+    updaterAct = new QAction(QIcon(":/pics/download.png"), tr("Check Update"), this);
+
     // aboutQtAct->setShortcut(QKeySequence::Quit);
     updaterAct->setToolTip(tr("check for an update"));
     connect(updaterAct, SIGNAL(triggered()), this, SLOT(checkUpdate()));
 
-    helpGroup = new QMenu(tr("&Help"),parentWidget);
+    helpGroup = new QMenu(tr("&Help"), parentWidget);
     helpGroup->addAction(aboutAct);
     helpGroup->addAction(aboutQtAct);
     helpGroup->addSeparator();
@@ -598,13 +617,11 @@ void MenuBar::createActions()
     helpGroup->addAction(updaterAct);
 }
 
-//---------------------------------------------------------------------------
-
+// ---------------------------------------------------------------------------
 
 
 void MenuBar::createEditWidget()
 {
-
     editWidget = new EditMenu;
     editWidget->setHub(hub);
     editWidget->setTextStyles(textStyles);
@@ -614,26 +631,42 @@ void MenuBar::createEditWidget()
     widgetToHideList << "zoomBox" << "textWidthBox";
     editWidget->hideWidgetsByName(widgetToHideList);
 
-    //editWidget->setFrameStyle(QFrame::Panel);
-    //editWidget->setLineWidth(2);
-    //editWidget->setMidLineWidth(3);
+    // editWidget->setFrameStyle(QFrame::Panel);
+    // editWidget->setLineWidth(2);
+    // editWidget->setMidLineWidth(3);
 
     // repeater to join editWidget to MainWindow :
 
-    connect(editWidget, SIGNAL(widthChangedSignal(int)), this, SIGNAL(widthChangedSignal(int)));
+    connect(editWidget,
+            SIGNAL(widthChangedSignal(int)),
+            this,
+            SIGNAL(widthChangedSignal(int)));
 
-    connect(editWidget,SIGNAL(textFontChangedSignal(QFont)),this,SIGNAL(textFontChangedSignal(QFont)));
-    connect(editWidget,SIGNAL(textHeightChangedSignal(int)),this,SIGNAL(textHeightChangedSignal(int)));
+    connect(editWidget,
+            SIGNAL(textFontChangedSignal(QFont)),
+            this,
+            SIGNAL(textFontChangedSignal(QFont)));
+    connect(editWidget,
+            SIGNAL(textHeightChangedSignal(int)),
+            this,
+            SIGNAL(textHeightChangedSignal(int)));
 
-    connect(this,SIGNAL(charFormatChangedSlotSignal(QTextCharFormat)),editWidget,SLOT(charFormatChangedSlot(QTextCharFormat)));
+    connect(this,
+            SIGNAL(charFormatChangedSlotSignal(QTextCharFormat)),
+            editWidget,
+            SLOT(charFormatChangedSlot(QTextCharFormat)));
 
-    connect(editWidget,SIGNAL(styleSelectedSignal(int)), this, SIGNAL(styleSelectedSignal(int)));
-    connect(this,SIGNAL(setStyleSelectionSignal(int)), editWidget, SLOT(setStyleSelectionSlot(int)));
+    connect(editWidget,
+            SIGNAL(styleSelectedSignal(int)),
+            this,
+            SIGNAL(styleSelectedSignal(int)));
+    connect(this,
+            SIGNAL(setStyleSelectionSignal(int)),
+            editWidget,
+            SLOT(setStyleSelectionSlot(int)));
 }
 
-
-
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 void MenuBar::setMenusEnabled(bool enabledBool)
 {
@@ -642,12 +675,10 @@ void MenuBar::setMenusEnabled(bool enabledBool)
     exportAct->setEnabled(enabledBool);
     saveProjectAct->setEnabled(enabledBool);
 
-    projectAlreadyOpened=enabledBool;
-
+    projectAlreadyOpened = enabledBool;
 }
 
-
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 void MenuBar::createButtons()
 {
     //    QSize buttonSize(120,60);
@@ -661,15 +692,19 @@ void MenuBar::createButtons()
     //    newProjectButton->setText(tr("&New Project"));
     //    newProjectButton->setShortcut(QKeySequence::New);
     //    newProjectButton->setToolTip(tr("Create a new project"));
-    //    connect(newProjectButton, SIGNAL(clicked()), this, SLOT(newProject()));
+    //    connect(newProjectButton, SIGNAL(clicked()), this,
+    // SLOT(newProject()));
 
     //    projectManagerButton = new QToolButton(this);
     //    projectManagerButton->setMaximumSize(buttonSize);
-    //    projectManagerButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    //
+    //  projectManagerButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     //    projectManagerButton->setText(tr("Project &Manager"));
     //    // projectManagerAct->setShortcut(QKeySequence::New);
-    //    projectManagerButton->setToolTip(tr("Create and manage your projects"));
-    //    connect(projectManagerButton, SIGNAL(clicked()), this, SLOT(projectManager()));
+    //    projectManagerButton->setToolTip(tr("Create and manage your
+    // projects"));
+    //    connect(projectManagerButton, SIGNAL(clicked()), this,
+    // SLOT(projectManager()));
 
     //    //    openButton = new QToolButton(this);
     //    //    openButton->setMaximumSize(buttonSize);
@@ -685,13 +720,15 @@ void MenuBar::createButtons()
     //    displayConfigButton->setText(tr("&Configure"));
     //    //    displayConfigButton->setShortcut(QKeySequence::Print);
     //    displayConfigButton->setToolTip(tr("Display the configuration"));
-    //    connect(displayConfigButton, SIGNAL(clicked()), this, SLOT(displayConfig()));
+    //    connect(displayConfigButton, SIGNAL(clicked()), this,
+    // SLOT(displayConfig()));
 
     //    findReplaceButton = new QToolButton(this);
     //    findReplaceButton->setText(tr("&Find && Replace"));
     //    // aboutAct->setShortcut(QKeySequence::Quit);
     //    findReplaceButton->setToolTip(tr("Find & Replace Dialog"));
-    //    connect(findReplaceButton, SIGNAL(clicked()), this, SLOT(findAndReplace()));
+    //    connect(findReplaceButton, SIGNAL(clicked()), this,
+    // SLOT(findAndReplace()));
 
 
     //    exportButton = new QToolButton(this);
@@ -716,7 +753,8 @@ void MenuBar::createButtons()
     //    closeProjectButton->setText(tr("&Close project"));
     //    closeProjectButton->setShortcut(QKeySequence::Close);
     //    closeProjectButton->setToolTip(tr("Print the document"));
-    //    connect(closeProjectButton, SIGNAL(clicked()), this, SLOT(closeProject()));;
+    //    connect(closeProjectButton, SIGNAL(clicked()), this,
+    // SLOT(closeProject()));;
 
     //    exitButton = new QToolButton(this);
     //    exitButton->setMaximumSize(buttonSize);
@@ -763,8 +801,6 @@ void MenuBar::createButtons()
     //    //    aboutButton->setFixedSize(size);
 
 
-
-
     //    baseGridLayout->addWidget(newProjectButton);
     //    baseGridLayout->addWidget(projectManagerButton);
     //    //   baseGridLayout->addWidget(openButton);
@@ -792,49 +828,26 @@ void MenuBar::createButtons()
     //    setLayout(baseGridLayout);
 }
 
-
-
-
-
-
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 void MenuBar::readSettings()
-{
+{}
 
-
-}
-
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 void MenuBar::writeSettings()
-{
+{}
 
-
-
-}
-
-
-
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
 void MenuBar::openNewProjectSlot()
 {
-
     newProject();
-
-
-
-
 }
 
-
-
-//---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 void MenuBar::giveStyle()
 {
-
-
     //    setStyleSheet(" QToolButton {"
     //                  "background-color: grey;"
     //                  "border-style: outset;"
@@ -849,16 +862,13 @@ void MenuBar::giveStyle()
     //                  "background-color: rgb(150, 150, 150);"
     //                  "border-style: inset;"
     //                  "}"
-    //);
-
-
+    // );
 }
 
-
-
-//---------------------------------------------------------------------------
-//----------Apply Config---------------------------------------------------------------------
-//-----------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// ----------Apply
+// Config---------------------------------------------------------------------
+// -----------------------------------------------------------------------------------------------
 
 
 void MenuBar::applyConfig()
